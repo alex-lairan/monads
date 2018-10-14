@@ -3,6 +3,6 @@ require "./spec_helper"
 
 describe Monads do
   it "should have version" do
-    Monads::VERSION.should eq("1.0.0")
+    Monads::VERSION.should eq("0.1.0")
   end
 end
