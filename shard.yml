@@ -1,0 +1,9 @@
+name: monads
+version: 1.0.0
+
+authors:
+  - Alexandre Lairan <lairana@free.fr>
+
+crystal: 0.26.1
+
+license: MIT
