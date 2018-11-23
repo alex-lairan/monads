@@ -8,9 +8,11 @@ module Monads
       false
     end
 
-    def equal?(rhs) : Bool
+    def equal?(rhs : RightBiased) : Bool
       value! == rhs.value!
-    rescue
+    end
+
+    def equal?(rhs : LeftBiased) : Bool
       false
     end
 
@@ -53,7 +55,11 @@ module Monads
       true
     end
 
-    def equal?(rhs)
+    def equal?(rhs : RightBiased) : Bool
+      false
+    end
+
+    def equal?(rhs : LeftBiased) : Bool
       failure == rhs.failure
     end
 

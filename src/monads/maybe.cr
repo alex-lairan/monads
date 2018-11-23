@@ -8,14 +8,14 @@ module Monads
       Some.new(value)
     end
 
-    def ==(rhs : Maybe) : Bool
+    def ==(rhs : RightBiased | LeftBiased) : Bool
       equal?(rhs)
     end
 
     abstract def success?
     abstract def failure?
 
-    abstract def equal?(rhs : Result)
+    abstract def equal?(rhs : RightBiased | LeftBiased)
     abstract def value!
     abstract def value_or(element : U) forall U
     abstract def value_or(&block : -> U) forall U
@@ -37,9 +37,11 @@ module Monads
       self.class.coerce(bind { block.call(@data) })
     end
 
-    def equal?(rhs : Maybe) : Bool
+    def equal?(rhs : Some(U)) : Bool forall U
       @data == rhs.value!
-    rescue
+    end
+
+    def equal?(rhs : None) : Bool
       false
     end
   end
