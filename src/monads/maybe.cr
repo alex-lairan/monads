@@ -1,7 +1,12 @@
 module Monads
   abstract class Maybe(T)
+    def just?
+      typeof(self) == Just(T)
     end
 
+    def nothing?
+      !just?
+    end
 
     abstract def value!
     abstract def value_or(element : U) forall U
@@ -24,6 +29,12 @@ module Monads
       Just(U).new(block.call(@data))
     end
 
+    def to_s
+      "#{typeof(self)}{#{value!.inspect}}"
+    end
+
+    def inspect(io)
+      io << to_s
     end
 
     def ==(other : self) : Bool
@@ -44,6 +55,14 @@ module Monads
 
     def equal?(rhs : Nothing(U)) : Bool forall U
       typeof(self) == typeof(rhs)
+    end
+
+    def to_s
+      "#{typeof(self)}"
+    end
+
+    def inspect(io)
+      io << to_s
     end
 
     def ==(other : self) : Bool
