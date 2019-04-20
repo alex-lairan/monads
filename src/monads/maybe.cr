@@ -50,7 +50,7 @@ module Monads
     end
 
     def equal?(rhs : Nothing(U)) : Bool forall U
-      return typeof(self) == typeof(rhs)
+      typeof(self) == typeof(rhs)
     end
   end
 end
