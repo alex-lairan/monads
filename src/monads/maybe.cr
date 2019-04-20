@@ -26,6 +26,8 @@ module Monads
 
     end
 
+    def ==(other : self) : Bool
+      other.value! == value!
     end
   end
 
@@ -42,6 +44,10 @@ module Monads
 
     def equal?(rhs : Nothing(U)) : Bool forall U
       typeof(self) == typeof(rhs)
+    end
+
+    def ==(other : self) : Bool
+      typeof(self) == typeof(other)
     end
   end
 end
