@@ -1,13 +1,13 @@
 module Monads
   abstract class Maybe(T)
-    def ==(rhs : RightBiased | LeftBiased) : Bool
-      equal?(rhs)
+    def just?
+      typeof(self) == Just(T)
     end
 
-    abstract def success?
-    abstract def failure?
+    def nothing?
+      !just?
+    end
 
-    abstract def equal?(rhs : RightBiased | LeftBiased)
     abstract def value!
     abstract def value_or(element : U) forall U
     abstract def value_or(&block : -> U) forall U
@@ -29,12 +29,16 @@ module Monads
       Just(U).new(block.call(@data))
     end
 
-    def equal?(rhs : Just(U)) : Bool forall U
-      @data == rhs.value!
+    def to_s
+      "#{typeof(self)}{#{value!.inspect}}"
     end
 
-    def equal?(rhs : Nothing(U)) : Bool forall U
-      false
+    def inspect(io)
+      io << to_s
+    end
+
+    def ==(other : self) : Bool
+      other.value! == value!
     end
   end
 
@@ -51,6 +55,18 @@ module Monads
 
     def equal?(rhs : Nothing(U)) : Bool forall U
       typeof(self) == typeof(rhs)
+    end
+
+    def to_s
+      "#{typeof(self)}"
+    end
+
+    def inspect(io)
+      io << to_s
+    end
+
+    def ==(other : self) : Bool
+      typeof(self) == typeof(other)
     end
   end
 end

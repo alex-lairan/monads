@@ -18,29 +18,17 @@ describe Monads::Nothing do
     end
   end
 
-  describe "#equal?" do
-    it "equal for same values" do
-      boolean = Monads::Nothing(String).new.equal?(Monads::Nothing(String).new)
-      boolean.should be_truthy
-    end
-
-    it "not equal for differents values" do
-      boolean = Monads::Nothing(Int32).new.equal?(Monads::Just.new(2))
-      boolean.should be_falsey
+  describe "#just?" do
+    it "verify that type is not Just" do
+      boolean = Monads::Nothing(Nil).new
+      boolean.just?.should be_falsey
     end
   end
 
-  describe "#success?" do
-    it "is success" do
+  describe "#nothing?" do
+    it "verify that type is Just" do
       boolean = Monads::Nothing(Nil).new
-      boolean.success?.should be_falsey
-    end
-  end
-
-  describe "#failure?" do
-    it "is not failure" do
-      boolean = Monads::Nothing(Nil).new
-      boolean.failure?.should be_truthy
+      boolean.nothing?.should be_truthy
     end
   end
 
@@ -101,6 +89,13 @@ describe Monads::Nothing do
       # expectation = 0
       # Monads::None::Instance.tee { |value| expectation = value }
       # expectation.should eq(0)
+    end
+  end
+
+  describe "#to_s" do
+    it "validate string" do
+      monad = Monads::Nothing(Nil).new
+      monad.to_s.should eq("#{typeof(monad)}")
     end
   end
 end
