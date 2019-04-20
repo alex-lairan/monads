@@ -21,9 +21,9 @@ module Monads
       List.new(@value + rhs.value)
     end
 
-    def head : Some(T) | None
-      return None::Instance if @value.size == 0
-      Maybe.coerce(@value.first)
+    def head : Maybe(T)
+      return Nothing(T).new if @value.size == 0
+      Just.new(@value.first)
     end
 
     def tail : List(T)

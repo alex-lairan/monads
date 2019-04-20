@@ -37,12 +37,12 @@ describe Monads::List do
   describe "#head" do
     it "get first value" do
       list = Monads::List.new([1, 2, 3])
-      list.head.should eq(Monads::Some.new(1))
+      list.head.should eq(Monads::Just.new(1))
     end
 
     it "get nothing for empty list" do
       list = Monads::List.new(Array(Int32).new)
-      list.head.should eq(Monads::None::Instance)
+      list.head.should eq(Monads::Nothing(Int32).new)
     end
   end
 
