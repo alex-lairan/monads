@@ -13,29 +13,17 @@ describe Monads::Just do
     end
   end
 
-  describe "#equal?" do
-    it "equal for same values" do
-      boolean = Monads::Just.new(1).equal?(Monads::Just.new(1))
-      boolean.should be_truthy
-    end
-
-    it "not equal for differents values" do
-      boolean = Monads::Just.new(1).equal?(Monads::Just.new(2))
-      boolean.should be_falsey
+  describe "#just?" do
+    it "verify that type is Just" do
+      boolean = Monads::Just.new(1)
+      boolean.just?.should be_truthy
     end
   end
 
-  describe "#success?" do
-    it "is success" do
+  describe "#nothing?" do
+    it "verify that type is not Just" do
       boolean = Monads::Just.new(1)
-      boolean.success?.should be_truthy
-    end
-  end
-
-  describe "#failure?" do
-    it "is not failure" do
-      boolean = Monads::Just.new(1)
-      boolean.failure?.should be_falsey
+      boolean.nothing?.should be_falsey
     end
   end
 
@@ -95,6 +83,13 @@ describe Monads::Just do
       expectation = 0
       Monads::Just.new(1).tee { |value| expectation = value }
       expectation.should eq(1)
+    end
+  end
+
+  describe "#to_s" do
+    it "validate string" do
+      monad = Monads::Just.new(nil)
+      monad.to_s.should eq("#{typeof(monad)}{#{monad.value!.inspect}}")
     end
   end
 end
