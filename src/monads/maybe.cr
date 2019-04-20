@@ -1,13 +1,5 @@
 module Monads
-  abstract class Maybe
-    def self.coerce(value : Nil) : None
-      None::Instance
-    end
-
-    def self.coerce(value : T) : Some(T) forall T
-      Some.new(value)
-    end
-
+  abstract class Maybe(T)
     def ==(rhs : RightBiased | LeftBiased) : Bool
       equal?(rhs)
     end
@@ -27,36 +19,38 @@ module Monads
     abstract def tee(&block : T -> U) forall U
   end
 
-  class Some(T) < Maybe
+  class Just(T) < Maybe(T)
     include Monads::RightBiased(T)
 
     def initialize(@data : T)
     end
 
-    def fmap(&block : T -> U) : Maybe forall U
-      self.class.coerce(bind { block.call(@data) })
+    def fmap(&block : T -> U) : Just(U) forall U
+      Just(U).new(block.call(@data))
     end
 
-    def equal?(rhs : Some(U)) : Bool forall U
+    def equal?(rhs : Just(U)) : Bool forall U
       @data == rhs.value!
     end
 
-    def equal?(rhs : None) : Bool
+    def equal?(rhs : Nothing(U)) : Bool forall U
       false
     end
   end
 
-  class None < Maybe
+  class Nothing(T) < Maybe(T)
     include Monads::LeftBiased(Nil)
 
-    Instance = None.new
+    def fmap(&block : T -> U) : Nothing(U) forall U
+      Nothing(U).new
+    end
 
-    def equal?(rhs : Some(T)) : Bool forall T
+    def equal?(rhs : Just(U)) : Bool forall U
       false
     end
 
-    def equal?(rhs : None) : Bool
-      true
+    def equal?(rhs : Nothing(U)) : Bool forall U
+      typeof(self) == typeof(rhs)
     end
   end
 end
