@@ -11,6 +11,11 @@ describe Monads::Nothing do
       boolean = Monads::Nothing(Int32).new == Monads::Just.new(2)
       boolean.should be_falsey
     end
+
+    it "not equal for different type" do
+      boolean = Monads::Nothing(Int32).new == Monads::Nothing(String).new
+      boolean.should be_falsey
+    end
   end
 
   describe "#equal?" do
