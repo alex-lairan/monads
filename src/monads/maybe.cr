@@ -49,14 +49,6 @@ module Monads
       Nothing(U).new
     end
 
-    def equal?(rhs : Just(U)) : Bool forall U
-      false
-    end
-
-    def equal?(rhs : Nothing(U)) : Bool forall U
-      typeof(self) == typeof(rhs)
-    end
-
     def to_s
       "#{typeof(self)}"
     end
