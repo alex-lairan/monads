@@ -92,4 +92,108 @@ describe Monads::Just do
       monad.to_s.should eq("#{typeof(monad)}{#{monad.value!.inspect}}")
     end
   end
+
+  describe "#<=>" do
+    it "'Just(1) <=> Just(2)' result is same with '1 <=> 2'" do
+      result = Monads::Just.new(1) <=> Monads::Just.new(2)
+      result.should eq(1 <=> 2)
+    end
+
+    it "'Just(\"foo\") <=> Just(\"foo\")' result is same with \"foo\" <=> \"foo\"" do
+      result = Monads::Just.new("foo") <=> Monads::Just.new("foo")
+      result.should eq("foo" <=> "foo")
+    end
+  end
+
+  describe "#<" do
+    it "'Just(1) < Just(2)' is valid'" do
+      boolean = Monads::Just.new(1) < Monads::Just.new(2)
+      boolean.should be_truthy
+    end
+
+    it "comparison of same value is invalid" do
+      boolean = Monads::Just.new(1) < Monads::Just.new(1)
+      boolean.should be_falsey
+    end
+
+    it "'Just('z') < Just('a')' is invalid" do
+      boolean = Monads::Just.new('z') < Monads::Just.new('a')
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#>" do
+    it "'Just(1) > Just(2)' is invalid" do
+      boolean = Monads::Just.new(1) > Monads::Just.new(2)
+      boolean.should be_falsey
+    end
+
+    it "comparison of same value is invalid" do
+      boolean = Monads::Just.new(1) > Monads::Just.new(1)
+      boolean.should be_falsey
+    end
+
+    it "'Just('z') > Just('a')' is valid" do
+      boolean = Monads::Just.new('z') > Monads::Just.new('a')
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#<=" do
+    it "'Just(1) <= Just(2)' is valid" do
+      boolean = Monads::Just.new(1) <= Monads::Just.new(2)
+      boolean.should be_truthy
+    end
+
+    it "comparison of samve value is valid" do
+      boolean = Monads::Just.new('a') <= Monads::Just.new('a')
+      boolean.should be_truthy
+    end
+
+    it "'Just(2.0) <= Just(1.0)' is invalid" do
+      boolean = Monads::Just.new(2.0) <= Monads::Just.new(1.0)
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#>=" do
+    it "'Just(1) >= Just(2)' is invalid" do
+      boolean = Monads::Just.new(1) >= Monads::Just.new(2)
+      boolean.should be_falsey
+    end
+
+    it "comparison of same value is valid" do
+      boolean = Monads::Just.new('a') >= Monads::Just.new('a')
+      boolean.should be_truthy
+    end
+
+    it "'Just(2.0) >= Just(1.0)' is valid" do
+      boolean = Monads::Just.new(2.0) >= Monads::Just.new(1.0)
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#==" do
+    it "comparison of different value is invalid" do
+      boolean = Monads::Just.new(1) == Monads::Just.new(2)
+      boolean.should be_falsey
+    end
+
+    it "comparison of same value is valid" do
+      boolean = Monads::Just.new(1) == Monads::Just.new(1)
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#!=" do
+    it "comparison of different value is valid" do
+      boolean = Monads::Just.new(1) != Monads::Just.new(2)
+      boolean.should be_truthy
+    end
+
+    it "compare of samve value is invalid" do
+      boolean = Monads::Just.new(1) != Monads::Just.new(1)
+      boolean.should be_falsey
+    end
+  end
 end
