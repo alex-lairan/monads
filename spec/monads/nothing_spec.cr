@@ -11,11 +11,6 @@ describe Monads::Nothing do
       boolean = Monads::Nothing(Int32).new == Monads::Just.new(2)
       boolean.should be_falsey
     end
-
-    it "not equal for different type" do
-      boolean = Monads::Nothing(Int32).new == Monads::Nothing(String).new
-      boolean.should be_falsey
-    end
   end
 
   describe "#just?" do
@@ -96,6 +91,104 @@ describe Monads::Nothing do
     it "validate string" do
       monad = Monads::Nothing(Nil).new
       monad.to_s.should eq("#{typeof(monad)}")
+    end
+  end
+
+  describe "#<=>" do
+    it "check for same type" do
+      comp = Monads::Nothing(Int32).new <=> Monads::Nothing(Int32).new
+      comp.should eq(0)
+    end
+
+    it "'Nothing <=> Just' or 'Just <=> Nothing' always return 'nil'" do
+      comp = Monads::Nothing(Int32).new <=> Monads::Just.new(1)
+      comp.should be_nil
+      comp = Monads::Just.new(1) <=> Monads::Nothing(Int32).new
+      comp.should be_nil
+    end
+  end
+
+  describe "#<" do
+    it "comparison of Just is always invalid" do
+      boolean = Monads::Just.new(1) < Monads::Nothing(Int32).new
+      boolean.should be_falsey
+      boolean = Monads::Nothing(Char).new < Monads::Just.new('a')
+      boolean.should be_falsey
+    end
+
+    it "comparison of same type is invalid" do
+      boolean = Monads::Nothing(Int32).new < Monads::Nothing(Int32).new
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#>" do
+    it "comparison of Just is always invalid" do
+      boolean = Monads::Just.new(1) > Monads::Nothing(Int32).new
+      boolean.should be_falsey
+      boolean = Monads::Nothing(Char).new > Monads::Just.new('a')
+      boolean.should be_falsey
+    end
+
+    it "comparison of same type is invalid" do
+      boolean = Monads::Nothing(Int32).new > Monads::Nothing(Int32).new
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#<=" do
+    it "comparison of Just is always invalid" do
+      boolean = Monads::Just.new(1) <= Monads::Nothing(Int32).new
+      boolean.should be_falsey
+      boolean = Monads::Nothing(Char).new <= Monads::Just.new('a')
+      boolean.should be_falsey
+    end
+
+    it "comparison of same type is valid" do
+      boolean = Monads::Nothing(Int32).new <= Monads::Nothing(Int32).new
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#>=" do
+    it "comparison of Just is always invalid" do
+      boolean = Monads::Just.new(1) >= Monads::Nothing(Int32).new
+      boolean.should be_falsey
+      boolean = Monads::Nothing(Char).new >= Monads::Just.new('a')
+      boolean.should be_falsey
+    end
+
+    it "comparison of same type is valid" do
+      boolean = Monads::Nothing(Int32).new >= Monads::Nothing(Int32).new
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#==" do
+    it "comparison of Just is always invalid" do
+      boolean = Monads::Just.new(1) == Monads::Nothing(Int32).new
+      boolean.should be_falsey
+      boolean = Monads::Nothing(Char).new == Monads::Just.new('a')
+      boolean.should be_falsey
+    end
+
+    it "comparison of same type is valid" do
+      boolean = Monads::Nothing(Int32).new == Monads::Nothing(Int32).new
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#!=" do
+    it "comparison of Just is always valid" do
+      boolean = Monads::Just.new(1) != Monads::Nothing(Int32).new
+      boolean.should be_truthy
+      boolean = Monads::Nothing(Char).new != Monads::Just.new('a')
+      boolean.should be_truthy
+    end
+
+    it "comparison of same type is invalid" do
+      boolean = Monads::Nothing(Int32).new != Monads::Nothing(Int32).new
+      boolean.should be_falsey
     end
   end
 end

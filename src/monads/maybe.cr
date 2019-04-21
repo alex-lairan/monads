@@ -1,5 +1,7 @@
 module Monads
   abstract class Maybe(T)
+    include Comparable(Maybe)
+
     def just?
       typeof(self) == Just(T)
     end
@@ -17,10 +19,13 @@ module Monads
     abstract def bind(lambda : T -> U) forall U
     abstract def fmap(&block : T -> U) forall U
     abstract def tee(&block : T -> U) forall U
+
+    abstract def <=>(other : Maybe(T))
   end
 
   class Just(T) < Maybe(T)
     include Monads::RightBiased(T)
+    include Comparable(Just)
 
     def initialize(@data : T)
     end
@@ -37,8 +42,8 @@ module Monads
       io << to_s
     end
 
-    def ==(other : self) : Bool
-      other.value! == value!
+    def <=>(other : Maybe(T))
+      typeof(other) == typeof(self) ? value! <=> other.value! : nil
     end
   end
 
@@ -57,8 +62,8 @@ module Monads
       io << to_s
     end
 
-    def ==(other : self) : Bool
-      typeof(self) == typeof(other)
+    def <=>(other : Maybe(T))
+      return typeof(self) == typeof(other) ? 0 : nil
     end
   end
 end
