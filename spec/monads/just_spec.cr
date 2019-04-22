@@ -49,7 +49,7 @@ describe Monads::Just do
   describe "#or" do
     it "result himself" do
       monad = Monads::Just.new(1)
-      exclude = Monads::Success.new("Foo")
+      exclude = Monads::Just.new(3)
       monad.or(exclude).should eq(monad)
     end
   end
@@ -57,12 +57,12 @@ describe Monads::Just do
   describe "#bind" do
     it "export value (block)" do
       monad = Monads::Just.new(1)
-      monad.bind { |value| value + 1 }.should eq(2)
+      monad.bind { |value| Monads::Just.new(value + 1) }.should eq(Monads::Just.new(2))
     end
 
     it "export value (proc)" do
       monad = Monads::Just.new(1)
-      monad.bind(->(value : Int32){ value + 1 }).should eq(2)
+      monad.bind(&->(value : Int32){ Monads::Just.new(value + 1) }).should eq(Monads::Just.new(2))
     end
   end
 
@@ -73,16 +73,10 @@ describe Monads::Just do
     end
   end
 
-  describe "#tee" do
-    it "result himself" do
-      monad = Monads::Just.new(1)
-      monad.tee { |value| value + 1}.should eq(monad)
-    end
-
-    it "value is forwarded" do
-      expectation = 0
-      Monads::Just.new(1).tee { |value| expectation = value }
-      expectation.should eq(1)
+  describe "#map_or" do
+    it "apply function in the case of Just" do
+      monad = Monads::Just.new(2).map_or(-1) { |value| value + 1 }
+      monad.should eq(3)
     end
   end
 

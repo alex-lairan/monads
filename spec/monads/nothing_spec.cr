@@ -27,14 +27,6 @@ describe Monads::Nothing do
     end
   end
 
-  describe "#value!" do
-    it "get correct value" do
-      expect_raises(Monads::UnwrapError) do
-        Monads::Nothing(Int32).new.value!
-      end
-    end
-  end
-
   describe "#value_or" do
     it "export value (unit)" do
       monad = Monads::Nothing(Int32).new
@@ -56,34 +48,28 @@ describe Monads::Nothing do
   end
 
   describe "#bind" do
-    # it "export value (block)" do
-    #   monad = Monads::None::Instance
-    #   monad.bind { |value| value + 1 }.should eq(monad)
-    # end
-    #
-    # it "export value (proc)" do
-    #   monad = Monads::None::Instance
-    #   monad.bind(->(value : Int32){ value + 1 }).should eq(monad)
-    # end
+    it "export value (block)" do
+      monad = Monads::Nothing(Int32).new
+      monad.bind { |value| Monads::Maybe.return(value + 1) }.should eq(monad)
+    end
+    
+    it "export value (proc)" do
+      monad = Monads::Nothing(Int32).new
+      monad.bind(&->(value : Int32){ Monads::Maybe.return(value + 1) }).should eq(monad)
+    end
   end
 
   describe "#fmap" do
-    # it "not increase by one" do
-    #   monad = Monads::None::Instance.fmap { |value| value + 1 }
-    #   monad.should eq(Monads::None::Instance)
-    # end
+    it "not increase by one" do
+      monad = Monads::Nothing(String).new.fmap { |value| value + "added" }
+      monad.should eq(Monads::Nothing(String).new)
+    end
   end
 
-  describe "#tee" do
-    it "result himself" do
-      # monad = Monads::None::Instance
-      # monad.tee { |value| value + 1}.should eq(monad)
-    end
-
-    it "value is not forwarded" do
-      # expectation = 0
-      # Monads::None::Instance.tee { |value| expectation = value }
-      # expectation.should eq(0)
+  describe "#map_or" do
+    it "return default value in the case of Nothign" do
+      monad = Monads::Nothing(Int32).new.map_or(-1) { |value| value + 1 }
+      monad.should eq(-1)
     end
   end
 
