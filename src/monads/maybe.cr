@@ -1,6 +1,9 @@
+require "./monad"
+
 module Monads
   abstract class Maybe(T)
     include Comparable(Maybe)
+    include Monads::Monad(T)
 
     def just?
       typeof(self) == Just(T)
@@ -10,24 +13,27 @@ module Monads
       !just?
     end
 
-    abstract def value!
-    abstract def value_or(element : U) forall U
-    abstract def value_or(&block : -> U) forall U
-    abstract def or(monad : Result)
-
-    abstract def bind(&block : T -> U) forall U
-    abstract def bind(lambda : T -> U) forall U
-    abstract def fmap(&block : T -> U) forall U
-    abstract def tee(&block : T -> U) forall U
+    def self.return(v : T)
+      Just.new(v)
+    end
 
     abstract def <=>(other : Maybe(T))
+    abstract def to_s
+    abstract def inspect(io)
+    abstract def or(default : Maybe(T)) : Maybe(T)
+    abstract def value_or(default : T) : T
+    abstract def value_or(&block : -> T) : T
+    abstract def map_or(default : U, &block : T -> U) : U forall U
   end
 
   class Just(T) < Maybe(T)
-    include Monads::RightBiased(T)
     include Comparable(Just)
 
     def initialize(@data : T)
+    end
+
+    def value!
+      @data
     end
 
     def fmap(&block : T -> U) : Just(U) forall U
@@ -43,13 +49,36 @@ module Monads
     end
 
     def <=>(other : Maybe(T))
-      typeof(other) == typeof(self) ? value! <=> other.value! : nil
+      case other
+      when Just(T)
+        value! <=> other.value!
+      else
+        nil
+      end
+    end
+
+    def bind(&block : T -> Maybe(U)) : Maybe(U) forall U
+      block.call(value!)
+    end
+
+    def value_or(default : T) : T
+      value!
+    end
+
+    def value_or(&block : -> T) : T
+      value!
+    end
+
+    def or(default : Maybe(T)) : Maybe(T)
+      Just.new(value!)
+    end
+
+    def map_or(default : U, &block : T -> U) : U forall U
+      block.call(value!)
     end
   end
 
   class Nothing(T) < Maybe(T)
-    include Monads::LeftBiased(Nil)
-
     def fmap(&block : T -> U) : Nothing(U) forall U
       Nothing(U).new
     end
@@ -64,6 +93,26 @@ module Monads
 
     def <=>(other : Maybe(T))
       return typeof(self) == typeof(other) ? 0 : nil
+    end
+
+    def bind(&block : T -> Maybe(U)) : Maybe(U) forall U
+      Nothing(U).new
+    end
+
+    def value_or(default : T) : T
+      default
+    end
+
+    def value_or(&block : -> T) : T
+      block.call
+    end
+
+    def or(default : Maybe(T)) : Maybe(T)
+      default
+    end
+
+    def map_or(default : U, &block : T -> U) : U forall U
+      default
     end
   end
 end
