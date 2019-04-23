@@ -3,6 +3,7 @@ require "./monad"
 module Monads
   abstract class Maybe(T)
     include Comparable(Maybe)
+    include Enumerable(T)
     include Monads::Monad(T)
 
     def just?
@@ -24,6 +25,7 @@ module Monads
     abstract def value_or(default : T) : T
     abstract def value_or(&block : -> T) : T
     abstract def map_or(default : U, &block : T -> U) : U forall U
+    abstract def each(&block : T -> _)
   end
 
   class Just(T) < Maybe(T)
@@ -76,6 +78,10 @@ module Monads
     def map_or(default : U, &block : T -> U) : U forall U
       block.call(value!)
     end
+
+    def each(&block : T -> _)
+      yield value!
+    end
   end
 
   class Nothing(T) < Maybe(T)
@@ -113,6 +119,9 @@ module Monads
 
     def map_or(default : U, &block : T -> U) : U forall U
       default
+    end
+
+    def each(&block : T -> _)
     end
   end
 end
