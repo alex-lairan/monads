@@ -190,4 +190,12 @@ describe Monads::Just do
       boolean.should be_falsey
     end
   end
+
+  describe "#each" do
+    it "target will certainly become 11 by each" do
+      target = 1
+      Monads::Just.new(10).each {|x| target += x}
+      target.should eq(11)
+    end
+  end
 end

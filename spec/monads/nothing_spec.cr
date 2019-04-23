@@ -177,4 +177,12 @@ describe Monads::Nothing do
       boolean.should be_falsey
     end
   end
+
+  describe "#each" do
+    it "target will not changed" do
+      target = 1
+      Monads::Nothing(Int32).new.each {|x| target += 10}
+      target.should eq(1)
+    end
+  end
 end
