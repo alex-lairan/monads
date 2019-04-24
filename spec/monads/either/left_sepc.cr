@@ -1,108 +1,184 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-describe Monads::Failure do
+describe Monads::Left do
   describe "#==" do
     it "equal for same values" do
-      boolean = Monads::Failure.new(1) == Monads::Failure.new(1)
+      boolean = Monads::Left.new(1) == Monads::Left.new(1)
       boolean.should be_truthy
     end
 
     it "not equal for differents values" do
-      boolean = Monads::Failure.new(1) == Monads::Failure.new(2)
+      boolean = Monads::Left.new(1) == Monads::Left.new(2)
+      boolean.should be_falsey
+    end
+
+    it "comparing different type by '#==' should be invalid" do
+      boolean = Monads::Left.new(1) == Monads::Right.new(1)
       boolean.should be_falsey
     end
   end
 
-  describe "#equal?" do
-    it "equal for same values" do
-      boolean = Monads::Failure.new(1).equal?(Monads::Failure.new(1))
+  describe "#!=" do
+    it "'Left(1) != Left(2)' should be valid" do
+      boolean = Monads::Left.new(1) != Monads::Left.new(2)
       boolean.should be_truthy
     end
 
-    it "not equal for differents values" do
-      boolean = Monads::Failure.new(1).equal?(Monads::Failure.new(2))
+    it "'Left(1) != Left(1)' should be invalid" do
+      boolean = Monads::Left.new(1) != Monads::Left.new(1)
+      boolean.should be_falsey
+    end
+
+    it "comparing different type by '#!=' should be valid" do
+      boolean = Monads::Left.new(1) != Monads::Right.new(1)
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#right?" do
+    it "'Left(1).right?' should be invalid" do
+      boolean = Monads::Left.new(1).right?
       boolean.should be_falsey
     end
   end
 
-  describe "#success?" do
-    it "is success" do
-      boolean = Monads::Failure.new(1)
-      boolean.success?.should be_falsey
-    end
-  end
-
-  describe "#failure?" do
-    it "is not failure" do
-      boolean = Monads::Failure.new(1)
-      boolean.failure?.should be_truthy
+  describe "#left?" do
+    it "'Left(1).left?' should be valid" do
+      boolean = Monads::Left.new(1).left?
+      boolean.should be_truthy
     end
   end
 
   describe "#value!" do
     it "get correct value" do
-      expect_raises(Monads::UnwrapError) do
-        Monads::Failure.new(1).value!
-      end
+      Monads::Left.new(1).value!.should eq(1)
     end
   end
 
-  describe "#failure" do
-    it "raise exception" do
-      monad = Monads::Failure.new(1)
-      monad.failure.should eq(1)
-    end
-  end
+  # describe "#value_or" do
+  #   it "export value (unit)" do
+  #     monad = Monads::Left.new(1)
+  #     monad.value_or(5).should eq(5)
+  #   end
 
-  describe "#value_or" do
-    it "export value (unit)" do
-      monad = Monads::Failure.new(1)
-      monad.value_or(5).should eq(5)
-    end
+  #   it "export value (block)" do
+  #     monad = Monads::Left.new(1)
+  #     monad.value_or { 5 }.should eq(5)
+  #   end
+  # end
 
-    it "export value (block)" do
-      monad = Monads::Failure.new(1)
-      monad.value_or { 5 }.should eq(5)
-    end
-  end
+  # describe "#or" do
+  #   it "result himself" do
+  #     monad = Monads::Left.new(1)
+  #     exclude = Monads::Left.new("Foo")
+  #     monad.or(exclude).should eq(exclude)
+  #   end
+  # end
 
-  describe "#or" do
-    it "result himself" do
-      monad = Monads::Failure.new(1)
-      exclude = Monads::Failure.new("Foo")
-      monad.or(exclude).should eq(exclude)
-    end
-  end
+  # describe "#bind" do
+  #   it "export value (block)" do
+  #     monad = Monads::Left.new(1)
+  #     monad.bind { |value| value + 1 }.should eq(monad)
+  #   end
 
-  describe "#bind" do
-    it "export value (block)" do
-      monad = Monads::Failure.new(1)
-      monad.bind { |value| value + 1 }.should eq(monad)
-    end
-
-    it "export value (proc)" do
-      monad = Monads::Failure.new(1)
-      monad.bind(->(value : Int32){ value + 1 }).should eq(monad)
-    end
-  end
+  #   it "export value (proc)" do
+  #     monad = Monads::Left.new(1)
+  #     monad.bind(->(value : Int32){ value + 1 }).should eq(monad)
+  #   end
+  # end
 
   describe "#fmap" do
     it "not increase by one" do
-      monad = Monads::Failure.new(1).fmap { |value| value + 1 }
-      monad.should eq(Monads::Failure.new(1))
+      monad = Monads::Left.new(1).fmap { |value| value + 1 }
+      monad.should eq(Monads::Left.new(1))
     end
   end
 
-  describe "#tee" do
-    it "result himself" do
-      monad = Monads::Failure.new(1)
-      monad.tee { |value| value + 1}.should eq(monad)
+  describe "#<" do
+    it "'Left(1) < Left(2)' should be valid" do
+      boolean = Monads::Left.new(1) < Monads::Left.new(2)
+      boolean.should be_truthy
     end
 
-    it "value is not forwarded" do
-      expectation = 0
-      Monads::Failure.new(1).tee { |value| expectation = value }
-      expectation.should eq(0)
+    it "'Left('z') < Left('z')' should be invalid" do
+      boolean = Monads::Left.new('z') < Monads::Left.new('z')
+      boolean.should be_falsey
+    end
+
+    it "'Left(2) < Left(1)' should be invalid" do
+      boolean = Monads::Left.new(2) < Monads::Left.new(1)
+      boolean.should be_falsey
+    end
+
+    it "comparing different type by '#<' should be invalid" do
+      boolean = Monads::Left.new(1) < Monads::Right.new(1)
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#<=" do
+    it "'Left(1) <= Left(2)' should be valid" do
+      boolean = Monads::Left.new(1) <= Monads::Left.new(2)
+      boolean.should be_truthy
+    end
+
+    it "'Left('z') <= Left('z')' should be valid" do
+      boolean = Monads::Left.new('z') <= Monads::Left.new('z')
+      boolean.should be_truthy
+    end
+
+    it "'Left(2) <= Left(1)' should be invalid" do
+      boolean = Monads::Left.new(2) <= Monads::Left.new(1)
+      boolean.should be_falsey
+    end
+
+    it "comparing different type by '#<=' should be invalid" do
+      boolean = Monads::Left.new(1) <= Monads::Right.new(1)
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#>" do
+    it "'Left(1) > Left(2)' should be invalid" do
+      boolean = Monads::Left.new(1) > Monads::Left.new(2)
+      boolean.should be_falsey
+    end
+
+    it "'Left('z') > Left('z')' should be invalid" do
+      boolean = Monads::Left.new('z') > Monads::Left.new('z')
+      boolean.should be_falsey
+    end
+
+    it "'Left(2) > Left(1)' should be valid" do
+      boolean = Monads::Left.new(2) > Monads::Left.new(1)
+      boolean.should be_truthy
+    end
+
+    it "comparing different type by '#>' should be invalid" do
+      boolean = Monads::Left.new(1) > Monads::Right.new(1)
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#>=" do
+    it "'Left(1) >= Left(2)' should be invalid" do
+      boolean = Monads::Left.new(1) >= Monads::Left.new(2)
+      boolean.should be_falsey
+    end
+
+    it "'Left('z') >= Left('z')' should be valid" do
+      boolean = Monads::Left.new('z') >= Monads::Left.new('z')
+      boolean.should be_truthy
+    end
+
+    it "'Left(2) >= Left(1)' should be invalid" do
+      boolean = Monads::Left.new(1) >= Monads::Left.new(1)
+      boolean.should be_truthy
+    end
+
+    it "comparing different type by '#>=' should be invalid" do
+      boolean = Monads::Left.new(1) >= Monads::Right.new(1)
+      boolean.should be_falsey
     end
   end
 end
