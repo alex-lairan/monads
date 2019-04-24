@@ -1,48 +1,43 @@
-require "./errors"
-require "./biased"
+require "./monad"
 
 module Monads
-  abstract class Result(T)
+  module Either(E, T)
+    include Monads::Monad(T)
+    include Comparable(Either)
+
+    def value!
+      @data
+    end
+    # abstract def value_or(element : U) forall U
+    # abstract def value_or(&block : -> U) forall U
+    # abstract def or(monad : Either(U)) forall U
+
+    # abstract def bind(&block : T -> U) forall U
+    # abstract def bind(lambda : T -> U) forall U
+    abstract def fmap(&block : T -> U) forall U
+    abstract def <=>(other : Either(E, T))
+    # abstract def tee(&block : T -> U) forall U
+  end
+
+  class Right(T)
+    include Either(Nil, T)
+
     def initialize(@data : T)
     end
 
-    def ==(rhs : RightBiased | LeftBiased) : Bool
-      equal?(rhs)
-    end
-
-    abstract def success?
-    abstract def failure?
-
-    abstract def equal?(rhs : RightBiased | LeftBiased)
-    abstract def value!
-    abstract def failure
-    abstract def value_or(element : U) forall U
-    abstract def value_or(&block : -> U) forall U
-    abstract def or(monad : Result(U)) forall U
-
-    abstract def bind(&block : T -> U) forall U
-    abstract def bind(lambda : T -> U) forall U
-    abstract def fmap(&block : T -> U) forall U
-    abstract def tee(&block : T -> U) forall U
-  end
-
-  class Success(T) < Result(T)
-    include Monads::RightBiased(T)
-
-    def failure : T
-      raise UnwrapError.new("failure", self.class.to_s)
-    end
-
-    def fmap(&block : T -> U) : Result forall U
-      Success.new(bind { |data| block.call(@data) })
+    def fmap(&block : T -> U) : Either forall U
+      Right.new(block.call(@data))
     end
   end
 
-  class Failure(T) < Result(T)
-    include Monads::LeftBiased(T)
+  class Left(E)
+    include Either(E, Nil)
 
-    def failure : T
-      @data
+    def initialize(@data : E)
+    end
+
+    def fmap(&block : T -> U) : Either(U) forall U
+      self
     end
   end
 end
