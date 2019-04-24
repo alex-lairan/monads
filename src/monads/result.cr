@@ -28,6 +28,13 @@ module Monads
     def fmap(&block : T -> U) : Either forall U
       Right.new(block.call(@data))
     end
+
+    def <=>(other : Either(E, T)) forall E
+      case other
+      when Right(T)
+        value! <=> other.value!
+      end
+    end
   end
 
   class Left(E)
@@ -38,6 +45,13 @@ module Monads
 
     def fmap(&block : T -> U) : Either(U) forall U
       self
+    end
+
+    def <=>(other : Either(E, T)) forall T
+      case other
+      when Left(E)
+        value! <=> other.value!
+      end
     end
   end
 end
