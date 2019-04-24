@@ -17,6 +17,10 @@ module Monads
       Just.new(v)
     end
 
+    def inspect(io)
+      io << to_s
+    end
+
     abstract def <=>(other : Maybe(T))
     abstract def to_s
     abstract def inspect(io)
@@ -42,10 +46,6 @@ module Monads
 
     def to_s
       "#{typeof(self)}{#{value!.inspect}}"
-    end
-
-    def inspect(io)
-      io << to_s
     end
 
     def <=>(other : Maybe(T))
@@ -85,10 +85,6 @@ module Monads
 
     def to_s
       "#{typeof(self)}"
-    end
-
-    def inspect(io)
-      io << to_s
     end
 
     def <=>(other : Maybe(T))
