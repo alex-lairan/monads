@@ -23,9 +23,8 @@ module Monads
 
     # abstract def bind(&block : T -> U) forall U
     # abstract def bind(lambda : T -> U) forall U
-    abstract def fmap(&block : T -> U) forall U
-    abstract def <=>(other : Either(E, T))
-    # abstract def tee(&block : T -> U) forall U
+    abstract def fmap(&block : T -> U) : Either forall U
+    abstract def <=>(other : Either)
   end
 
   class Right(T)
@@ -38,7 +37,7 @@ module Monads
       Right.new(block.call(@data))
     end
 
-    def <=>(other : Either(E, T)) forall E
+    def <=>(other : Either)
       case other
       when Right(T)
         value! <=> other.value!
@@ -52,11 +51,11 @@ module Monads
     def initialize(@data : E)
     end
 
-    def fmap(&block : T -> U) : Either(U) forall U
+    def fmap(&block : E -> U) : Either forall U
       self
     end
 
-    def <=>(other : Either(E, T)) forall T
+    def <=>(other : Either)
       case other
       when Left(E)
         value! <=> other.value!
