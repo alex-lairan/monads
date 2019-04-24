@@ -1,4 +1,4 @@
-require "./monads/result"
+require "./monads/either"
 require "./monads/maybe"
 require "./monads/list"
 
