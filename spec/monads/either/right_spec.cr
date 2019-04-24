@@ -1,108 +1,185 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-describe Monads::Success do
+describe Monads::Right do
   describe "#==" do
     it "equal for same values" do
-      boolean = Monads::Success.new(1) == Monads::Success.new(1)
+      boolean = Monads::Right.new(1) == Monads::Right.new(1)
       boolean.should be_truthy
     end
 
     it "not equal for differents values" do
-      boolean = Monads::Success.new(1) == Monads::Success.new(2)
+      boolean = Monads::Right.new(1) == Monads::Right.new(2)
+      boolean.should be_falsey
+    end
+
+    it "comparing different type by '#==' should be invalid" do
+      boolean = Monads::Right.new(1) == Monads::Left.new(1)
       boolean.should be_falsey
     end
   end
 
-  describe "#equal?" do
-    it "equal for same values" do
-      boolean = Monads::Success.new(1).equal?(Monads::Success.new(1))
+  describe "#!=" do
+    it "'Right(1) != Right(2)' should be valid" do
+      boolean = Monads::Right.new(1) != Monads::Right.new(2)
       boolean.should be_truthy
     end
 
-    it "not equal for differents values" do
-      boolean = Monads::Success.new(1).equal?(Monads::Success.new(2))
+    it "'Right(1) != Right(1)' should be invalid" do
+      boolean = Monads::Right.new(1) != Monads::Right.new(1)
       boolean.should be_falsey
     end
-  end
 
-  describe "#success?" do
-    it "is success" do
-      boolean = Monads::Success.new(1)
-      boolean.success?.should be_truthy
+    it "comparing different type by '#!=' should be valid" do
+      boolean = Monads::Right.new(1) != Monads::Left.new(1)
+      boolean.should be_truthy
     end
   end
 
-  describe "#failure?" do
-    it "is not failure" do
-      boolean = Monads::Success.new(1)
-      boolean.failure?.should be_falsey
+  describe "#right?" do
+    it "'Right(1).right?' should be valid" do
+      boolean = Monads::Right.new(1).right?
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#left?" do
+    it "'Right(1).left?' should be invalid" do
+      boolean = Monads::Right.new(1).left?
+      boolean.should be_falsey
     end
   end
 
   describe "#value!" do
     it "get correct value" do
-      monad = Monads::Success.new(1)
+      monad = Monads::Right.new(1)
       monad.value!.should eq(1)
     end
   end
 
-  describe "#failure" do
-    it "raise exception" do
-      expect_raises(Monads::UnwrapError) do
-        Monads::Success.new(1).failure
-      end
-    end
-  end
+  # describe "#value_or" do
+  #   it "export value (unit)" do
+  #     monad = Monads::Right.new(1)
+  #     monad.value_or(5).should eq(1)
+  #   end
 
-  describe "#value_or" do
-    it "export value (unit)" do
-      monad = Monads::Success.new(1)
-      monad.value_or(5).should eq(1)
-    end
+  #   it "export value (block)" do
+  #     monad = Monads::Right.new(1)
+  #     monad.value_or { 5 }.should eq(1)
+  #   end
+  # end
 
-    it "export value (block)" do
-      monad = Monads::Success.new(1)
-      monad.value_or { 5 }.should eq(1)
-    end
-  end
+  # describe "#or" do
+  #   it "result himself" do
+  #     monad = Monads::Right.new(1)
+  #     exclude = Monads::Right.new("Foo")
+  #     monad.or(exclude).should eq(monad)
+  #   end
+  # end
 
-  describe "#or" do
-    it "result himself" do
-      monad = Monads::Success.new(1)
-      exclude = Monads::Success.new("Foo")
-      monad.or(exclude).should eq(monad)
-    end
-  end
+  # describe "#bind" do
+  #   it "export value (block)" do
+  #     monad = Monads::Right.new(1)
+  #     monad.bind { |value| value + 1 }.should eq(2)
+  #   end
 
-  describe "#bind" do
-    it "export value (block)" do
-      monad = Monads::Success.new(1)
-      monad.bind { |value| value + 1 }.should eq(2)
-    end
-
-    it "export value (proc)" do
-      monad = Monads::Success.new(1)
-      monad.bind(->(value : Int32){ value + 1 }).should eq(2)
-    end
-  end
+  #   it "export value (proc)" do
+  #     monad = Monads::Right.new(1)
+  #     monad.bind(->(value : Int32){ value + 1 }).should eq(2)
+  #   end
+  # end
 
   describe "#fmap" do
     it "increase by one" do
-      monad = Monads::Success.new(1).fmap { |value| value + 1 }
-      monad.should eq(Monads::Success.new(2))
+      monad = Monads::Right.new(1).fmap { |value| value + 1 }
+      monad.should eq(Monads::Right.new(2))
     end
   end
 
-  describe "#tee" do
-    it "result himself" do
-      monad = Monads::Success.new(1)
-      monad.tee { |value| value + 1}.should eq(monad)
+  describe "#<" do
+    it "'Right(1) < Right(2)' should be valid" do
+      boolean = Monads::Right.new(1) < Monads::Right.new(2)
+      boolean.should be_truthy
     end
 
-    it "value is forwarded" do
-      expectation = 0
-      Monads::Success.new(1).tee { |value| expectation = value }
-      expectation.should eq(1)
+    it "'Right('z') < Right('z')' should be invalid" do
+      boolean = Monads::Right.new('z') < Monads::Right.new('z')
+      boolean.should be_falsey
+    end
+
+    it "'Right(2) < Right(1)' should be invalid" do
+      boolean = Monads::Right.new(2) < Monads::Right.new(1)
+      boolean.should be_falsey
+    end
+
+    it "comparing different type by '#<' should be invalid" do
+      boolean = Monads::Right.new(1) < Monads::Left.new(1)
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#<=" do
+    it "'Right(1) <= Right(2)' should be valid" do
+      boolean = Monads::Right.new(1) <= Monads::Right.new(2)
+      boolean.should be_truthy
+    end
+
+    it "'Right('z') <= Right('z')' should be valid" do
+      boolean = Monads::Right.new('z') <= Monads::Right.new('z')
+      boolean.should be_truthy
+    end
+
+    it "'Right(2) <= Right(1)' should be invalid" do
+      boolean = Monads::Right.new(2) <= Monads::Right.new(1)
+      boolean.should be_falsey
+    end
+
+    it "comparing different type by '#<=' should be invalid" do
+      boolean = Monads::Right.new(1) <= Monads::Left.new(1)
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#>" do
+    it "'Right(1) > Right(2)' should be invalid" do
+      boolean = Monads::Right.new(1) > Monads::Right.new(2)
+      boolean.should be_falsey
+    end
+
+    it "'Right('z') > Right('z')' should be invalid" do
+      boolean = Monads::Right.new('z') > Monads::Right.new('z')
+      boolean.should be_falsey
+    end
+
+    it "'Right(2) > Right(1)' should be valid" do
+      boolean = Monads::Right.new(2) > Monads::Right.new(1)
+      boolean.should be_truthy
+    end
+
+    it "comparing different type by '#>' should be invalid" do
+      boolean = Monads::Right.new(1) > Monads::Left.new(1)
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#>=" do
+    it "'Right(1) >= Right(2)' should be invalid" do
+      boolean = Monads::Right.new(1) >= Monads::Right.new(2)
+      boolean.should be_falsey
+    end
+
+    it "'Right('z') >= Right('z')' should be valid" do
+      boolean = Monads::Right.new('z') >= Monads::Right.new('z')
+      boolean.should be_truthy
+    end
+
+    it "'Right(2) >= Right(1)' should be invalid" do
+      boolean = Monads::Right.new(1) >= Monads::Right.new(1)
+      boolean.should be_truthy
+    end
+
+    it "comparing different type by '#>=' should be invalid" do
+      boolean = Monads::Right.new(1) >= Monads::Left.new(1)
+      boolean.should be_falsey
     end
   end
 end
