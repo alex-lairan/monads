@@ -23,7 +23,6 @@ module Monads
 
     abstract def <=>(other : Maybe(T))
     abstract def to_s
-    abstract def inspect(io)
     abstract def or(default : Maybe(T)) : Maybe(T)
     abstract def value_or(default : T) : T
     abstract def value_or(&block : -> T) : T
