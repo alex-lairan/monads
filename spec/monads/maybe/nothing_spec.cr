@@ -52,7 +52,7 @@ describe Monads::Nothing do
       monad = Monads::Nothing(Int32).new
       monad.bind { |value| Monads::Maybe.return(value + 1) }.should eq(monad)
     end
-    
+
     it "export value (proc)" do
       monad = Monads::Nothing(Int32).new
       monad.bind(&->(value : Int32){ Monads::Maybe.return(value + 1) }).should eq(monad)
@@ -86,11 +86,11 @@ describe Monads::Nothing do
       comp.should eq(0)
     end
 
-    it "'Nothing <=> Just' or 'Just <=> Nothing' always return 'nil'" do
+    it "'Nothing <=> Just' or 'Just <=> Nothing' always return number" do
       comp = Monads::Nothing(Int32).new <=> Monads::Just.new(1)
-      comp.should be_nil
+      comp.should eq(-1)
       comp = Monads::Just.new(1) <=> Monads::Nothing(Int32).new
-      comp.should be_nil
+      comp.should eq(1)
     end
   end
 
@@ -99,7 +99,7 @@ describe Monads::Nothing do
       boolean = Monads::Just.new(1) < Monads::Nothing(Int32).new
       boolean.should be_falsey
       boolean = Monads::Nothing(Char).new < Monads::Just.new('a')
-      boolean.should be_falsey
+      boolean.should be_truthy
     end
 
     it "comparison of same type is invalid" do
@@ -111,7 +111,7 @@ describe Monads::Nothing do
   describe "#>" do
     it "comparison of Just is always invalid" do
       boolean = Monads::Just.new(1) > Monads::Nothing(Int32).new
-      boolean.should be_falsey
+      boolean.should be_truthy
       boolean = Monads::Nothing(Char).new > Monads::Just.new('a')
       boolean.should be_falsey
     end
@@ -127,7 +127,7 @@ describe Monads::Nothing do
       boolean = Monads::Just.new(1) <= Monads::Nothing(Int32).new
       boolean.should be_falsey
       boolean = Monads::Nothing(Char).new <= Monads::Just.new('a')
-      boolean.should be_falsey
+      boolean.should be_truthy
     end
 
     it "comparison of same type is valid" do
@@ -139,7 +139,7 @@ describe Monads::Nothing do
   describe "#>=" do
     it "comparison of Just is always invalid" do
       boolean = Monads::Just.new(1) >= Monads::Nothing(Int32).new
-      boolean.should be_falsey
+      boolean.should be_truthy
       boolean = Monads::Nothing(Char).new >= Monads::Just.new('a')
       boolean.should be_falsey
     end

@@ -51,6 +51,8 @@ module Monads
       case other
       when Just(T)
         value! <=> other.value!
+      else
+        1
       end
     end
 
@@ -86,8 +88,12 @@ module Monads
       "#{typeof(self)}"
     end
 
-    def <=>(other : Maybe(T))
-      typeof(self) == typeof(other) ? 0 : nil
+    def <=>(other : Nothing)
+      0
+    end
+
+    def <=>(other : Just)
+      -1
     end
 
     def bind(&block : T -> Maybe(U)) : Maybe(U) forall U
