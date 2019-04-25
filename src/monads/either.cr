@@ -45,11 +45,12 @@ module Monads
       Right.new(block.call(@data))
     end
 
-    def <=>(other : Either)
-      case other
-      when Right(T)
-        value! <=> other.value!
-      end
+    def <=>(other : Right)
+      value! <=> other.value!
+    end
+
+    def <=>(other : Left)
+      1
     end
   end
 
@@ -63,11 +64,12 @@ module Monads
       self
     end
 
-    def <=>(other : Either)
-      case other
-      when Left(E)
-        value! <=> other.value!
-      end
+    def <=>(other : Left)
+      value! <=> other.value!
+    end
+
+    def <=>(other : Right)
+      -1
     end
   end
 end
