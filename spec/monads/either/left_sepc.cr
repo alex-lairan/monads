@@ -181,4 +181,11 @@ describe Monads::Left do
       boolean.should be_falsey
     end
   end
+
+  describe "#to_s" do
+    it "#to_s method return 'Monads::Left(Int32){1}'" do
+      monad = Monads::Left.new(1)
+      monad.to_s.should eq("Monads::Left(Int32){1}")
+    end
+  end
 end

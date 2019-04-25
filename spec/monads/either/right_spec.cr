@@ -182,4 +182,11 @@ describe Monads::Right do
       boolean.should be_falsey
     end
   end
+
+  describe "#to_s" do
+    it "#to_s method return 'Monads::Right(Int32){1}'" do
+      monad = Monads::Right.new(1)
+      monad.to_s.should eq("Monads::Right(Int32){1}")
+    end
+  end
 end

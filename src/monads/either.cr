@@ -17,6 +17,14 @@ module Monads
       !right?
     end
 
+    def to_s
+      "#{typeof(self)}{#{value!}}"
+    end
+
+    def inspect(io)
+      io << to_s
+    end
+
     # abstract def value_or(element : U) forall U
     # abstract def value_or(&block : -> U) forall U
     # abstract def or(monad : Either(U)) forall U
