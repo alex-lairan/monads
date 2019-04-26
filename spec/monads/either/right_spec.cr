@@ -155,9 +155,9 @@ describe Monads::Right do
       boolean.should be_truthy
     end
 
-    it "comparing different type by '#>' should be invalid" do
+    it "comparing different type by '#>' should be valid" do
       boolean = Monads::Right.new(1) > Monads::Left.new(1)
-      boolean.should be_falsey
+      boolean.should be_truthy
     end
   end
 
@@ -177,9 +177,9 @@ describe Monads::Right do
       boolean.should be_truthy
     end
 
-    it "comparing different type by '#>=' should be invalid" do
+    it "comparing different type by '#>=' should be valid" do
       boolean = Monads::Right.new(1) >= Monads::Left.new(1)
-      boolean.should be_falsey
+      boolean.should be_truthy
     end
   end
 
