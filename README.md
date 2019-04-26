@@ -1,4 +1,5 @@
 # monads
+[![Build Status](https://travis-ci.org/alex-lairan/monads.svg?branch=master)](https://travis-ci.org/alex-lairan/monads)
 
 Monads for Crystal.
 
