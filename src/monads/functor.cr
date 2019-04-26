@@ -3,4 +3,3 @@ module Monads
     abstract def fmap(&block : T -> U) : Functor(U)
   end
 end
-

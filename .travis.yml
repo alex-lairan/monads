@@ -3,4 +3,6 @@ language: crystal
 before_install:
   - shards install
 
-script: crystal spec
+script:
+  - crystal spec
+  - bin/ameba
