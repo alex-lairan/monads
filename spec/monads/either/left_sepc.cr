@@ -55,17 +55,17 @@ describe Monads::Left do
     end
   end
 
-  # describe "#value_or" do
-  #   it "export value (unit)" do
-  #     monad = Monads::Left.new(1)
-  #     monad.value_or(5).should eq(5)
-  #   end
+  describe "#value_or" do
+    it "export value (unit)" do
+      monad = Monads::Left.new(1)
+      monad.value_or(5).should eq(5)
+    end
 
-  #   it "export value (block)" do
-  #     monad = Monads::Left.new(1)
-  #     monad.value_or { 5 }.should eq(5)
-  #   end
-  # end
+    it "export value (block)" do
+      monad = Monads::Left.new(1)
+      monad.value_or { 5 }.should eq(5)
+    end
+  end
 
   # describe "#or" do
   #   it "result himself" do

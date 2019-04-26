@@ -25,8 +25,8 @@ module Monads
       io << to_s
     end
 
-    # abstract def value_or(element : U) forall U
-    # abstract def value_or(&block : -> U) forall U
+    abstract def value_or(element)
+    abstract def value_or(&block : -> U) forall U
     # abstract def or(monad : Either(U)) forall U
 
     # abstract def bind(&block : T -> U) forall U
@@ -52,6 +52,14 @@ module Monads
     def <=>(other : Left)
       1
     end
+
+    def value_or(element)
+      value!
+    end
+
+    def value_or(&block : -> U) : U | T forall U
+      value!
+    end
   end
 
   class Left(E)
@@ -70,6 +78,14 @@ module Monads
 
     def <=>(other : Right)
       -1
+    end
+
+    def value_or(element)
+      element
+    end
+
+    def value_or(&block : -> U) : U | E forall U
+      block.call
     end
   end
 end
