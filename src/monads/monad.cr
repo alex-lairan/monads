@@ -11,4 +11,3 @@ module Monads
     abstract def bind(&block : T -> Monad(U)) : Monad(U) forall U
   end
 end
-
