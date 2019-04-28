@@ -56,17 +56,17 @@ describe Monads::Right do
     end
   end
 
-  # describe "#value_or" do
-  #   it "export value (unit)" do
-  #     monad = Monads::Right.new(1)
-  #     monad.value_or(5).should eq(1)
-  #   end
+  describe "#value_or" do
+    it "export value (unit)" do
+      monad = Monads::Right.new(1)
+      monad.value_or(5).should eq(1)
+    end
 
-  #   it "export value (block)" do
-  #     monad = Monads::Right.new(1)
-  #     monad.value_or { 5 }.should eq(1)
-  #   end
-  # end
+    it "export value (block)" do
+      monad = Monads::Right.new(1)
+      monad.value_or { 5 }.should eq(1)
+    end
+  end
 
   # describe "#or" do
   #   it "result himself" do
@@ -189,4 +189,5 @@ describe Monads::Right do
       monad.to_s.should eq("Monads::Right(Int32){1}")
     end
   end
+
 end
