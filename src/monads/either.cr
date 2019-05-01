@@ -27,7 +27,7 @@ module Monads
 
     abstract def value_or(element)
     abstract def value_or(&block : -> U) forall U
-    # abstract def or(monad : Either(U)) forall U
+    abstract def or(monad : Either(F, U)) forall F, U
 
     # abstract def bind(&block : T -> U) forall U
     # abstract def bind(lambda : T -> U) forall U
@@ -60,6 +60,10 @@ module Monads
     def value_or(&block : -> U) : U | T forall U
       value!
     end
+
+    def or(monad : Either(F, U)) forall F, U
+      self
+    end
   end
 
   class Left(E)
@@ -86,6 +90,10 @@ module Monads
 
     def value_or(&block : -> U) : U | E forall U
       block.call
+    end
+
+    def or(monad : Either(F, U)) forall F, U
+      monad
     end
   end
 end
