@@ -188,4 +188,11 @@ describe Monads::Left do
       monad.to_s.should eq("Monads::Left(Int32){1}")
     end
   end
+
+  describe "#or" do
+    it "#or return argument" do
+      monad = Monads::Left.new(1).or(Monads::Right.new('a'))
+      monad.should eq(Monads::Right.new('a'))
+    end
+  end
 end

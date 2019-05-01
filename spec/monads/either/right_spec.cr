@@ -190,4 +190,10 @@ describe Monads::Right do
     end
   end
 
+  describe "#or" do
+    it "#or return self" do
+      monad = Monads::Right.new(1).or(Monads::Right.new('a'))
+      monad.should eq(Monads::Right.new(1))
+    end
+  end
 end
