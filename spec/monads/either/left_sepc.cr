@@ -67,26 +67,6 @@ describe Monads::Left do
     end
   end
 
-  # describe "#or" do
-  #   it "result himself" do
-  #     monad = Monads::Left.new(1)
-  #     exclude = Monads::Left.new("Foo")
-  #     monad.or(exclude).should eq(exclude)
-  #   end
-  # end
-
-  # describe "#bind" do
-  #   it "export value (block)" do
-  #     monad = Monads::Left.new(1)
-  #     monad.bind { |value| value + 1 }.should eq(monad)
-  #   end
-
-  #   it "export value (proc)" do
-  #     monad = Monads::Left.new(1)
-  #     monad.bind(->(value : Int32){ value + 1 }).should eq(monad)
-  #   end
-  # end
-
   describe "#fmap" do
     it "not increase by one" do
       monad = Monads::Left.new(1).fmap { |value| value + 1 }
@@ -193,6 +173,13 @@ describe Monads::Left do
     it "#or return argument" do
       monad = Monads::Left.new(1).or(Monads::Right.new('a'))
       monad.should eq(Monads::Right.new('a'))
+    end
+  end
+
+  describe "#bind" do
+    it "#bind return self" do
+      monad = Monads::Left.new(1).bind {|x| Monads::Right.new(x.to_s)}
+      monad.should eq(Monads::Left.new(1))
     end
   end
 end
