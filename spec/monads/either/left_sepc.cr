@@ -175,4 +175,11 @@ describe Monads::Left do
       monad.should eq(Monads::Right.new('a'))
     end
   end
+
+  describe "#bind" do
+    it "#bind return self" do
+      monad = Monads::Left.new(1).bind {|x| Monads::Right.new(x.to_s)}
+      monad.should eq(Monads::Left.new(1))
+    end
+  end
 end

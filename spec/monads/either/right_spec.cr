@@ -176,4 +176,11 @@ describe Monads::Right do
       monad.should eq(Monads::Right.new(1))
     end
   end
+
+  describe "#bind" do
+    it "#bind apply block" do
+      monad = Monads::Right.new(1).bind {|x| Monads::Right.new(x.to_s)}
+      monad.should eq(Monads::Right.new("1"))
+    end
+  end
 end
