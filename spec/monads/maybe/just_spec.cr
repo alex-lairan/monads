@@ -190,4 +190,11 @@ describe Monads::Just do
       boolean.should be_falsey
     end
   end
+
+  describe "self.return" do
+    it "Maybe.return should return Just" do
+      monad = Monads::Maybe.return(1)
+      monad.should eq(Monads::Just.new(1))
+    end
+  end
 end
