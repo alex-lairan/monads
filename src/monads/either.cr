@@ -24,6 +24,10 @@ module Monads
       io << to_s
     end
 
+    def self.return(value : T)
+      Right.new(value)
+    end
+
     abstract def value_or(element)
     abstract def value_or(&block : -> U) forall U
     abstract def or(monad : Either)
@@ -66,7 +70,6 @@ module Monads
   end
 
   struct Left(E) < Either(E, Nil)
-
     def initialize(@data : E)
     end
 
