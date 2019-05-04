@@ -183,4 +183,11 @@ describe Monads::Right do
       monad.should eq(Monads::Right.new("1"))
     end
   end
+
+  describe "self.return" do
+    it "`self.return` return Right" do
+      monad = Monads::Either.return(1)
+      monad.should eq(Monads::Right.new(1))
+    end
+  end
 end
