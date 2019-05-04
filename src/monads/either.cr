@@ -27,9 +27,6 @@ module Monads
     abstract def value_or(element)
     abstract def value_or(&block : -> U) forall U
     abstract def or(monad : Either)
-
-    abstract def bind(&block : T -> Either(E, U)) forall U
-    abstract def fmap(&block : T -> U) : Either forall U
     abstract def <=>(other : Right)
     abstract def <=>(other : Left)
   end
