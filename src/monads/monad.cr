@@ -1,7 +1,7 @@
 require "./functor"
 
 module Monads
-  abstract class Monad(T)
+  abstract struct Monad(T)
     include Monads::Functor(T)
 
     def self.return(v : T) : self

@@ -1,7 +1,7 @@
 require "./monad"
 
 module Monads
-  abstract class Maybe(T) < Monads::Monad(T)
+  abstract struct Maybe(T) < Monads::Monad(T)
     include Comparable(Maybe)
 
     def just?
@@ -29,7 +29,7 @@ module Monads
     abstract def map_or(default : U, &block : T -> U) : U forall U
   end
 
-  class Just(T) < Maybe(T)
+  struct Just(T) < Maybe(T)
 
     def initialize(@data : T)
     end
@@ -75,7 +75,7 @@ module Monads
     end
   end
 
-  class Nothing(T) < Maybe(T)
+  struct Nothing(T) < Maybe(T)
 
     def fmap(&block : T -> U) : Nothing(U) forall U
       Nothing(U).new

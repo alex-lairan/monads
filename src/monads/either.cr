@@ -1,7 +1,7 @@
 require "./monad"
 
 module Monads
-  abstract class Either(E, T) < Monad(T)
+  abstract struct Either(E, T) < Monad(T)
     include Comparable(Either)
 
     def value!
@@ -34,7 +34,7 @@ module Monads
     abstract def <=>(other : Left)
   end
 
-  class Right(T) < Either(Nil, T)
+  struct Right(T) < Either(Nil, T)
 
     def initialize(@data : T)
     end
@@ -68,7 +68,7 @@ module Monads
     end
   end
 
-  class Left(E) < Either(E, Nil)
+  struct Left(E) < Either(E, Nil)
 
     def initialize(@data : E)
     end
