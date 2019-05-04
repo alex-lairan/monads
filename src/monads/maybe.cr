@@ -1,7 +1,7 @@
 require "./monad"
 
 module Monads
-  abstract struct Maybe(T) < Monads::Monad(T)
+  abstract struct Maybe(T) < Monad(T)
     include Comparable(Maybe)
 
     def just?
