@@ -12,7 +12,7 @@ module Monads
       !just?
     end
 
-    def self.return(v : T)
+    def self.return(v : T) : Just(T)
       Just.new(v)
     end
 
@@ -23,14 +23,12 @@ module Monads
     abstract def <=>(other : Nothing)
     abstract def <=>(other : Just)
     abstract def to_s
-    abstract def or(default : Maybe(T)) : Maybe(T)
-    abstract def value_or(default : T) : T
-    abstract def value_or(&block : -> T) : T
-    abstract def map_or(default : U, &block : T -> U) : U forall U
+    abstract def or(default : Maybe) : Maybe
+    abstract def value_or(default : U) : T | U forall U
+    abstract def map_or(default : U, lambda : T -> U) : U forall U
   end
 
   struct Just(T) < Maybe(T)
-
     def initialize(@data : T)
     end
 
@@ -38,8 +36,8 @@ module Monads
       @data
     end
 
-    def fmap(&block : T -> U) : Just(U) forall U
-      Just(U).new(block.call(@data))
+    def fmap(lambda : T -> U) : Just(U) forall U
+      Just.new(lambda.call(@data))
     end
 
     def to_s
@@ -54,30 +52,25 @@ module Monads
       1
     end
 
-    def bind(&block : T -> Maybe(U)) : Maybe(U) forall U
-      block.call(value!)
+    def bind(lambda : T -> Just(U)) : Just(U) forall U
+      lambda.call(value!)
     end
 
-    def value_or(default : T) : T
+    def value_or(default : _)
       value!
     end
 
-    def value_or(&block : -> T) : T
-      value!
-    end
-
-    def or(default : Maybe(T)) : Maybe(T)
+    def or(default : Maybe)
       Just.new(value!)
     end
 
-    def map_or(default : U, &block : T -> U) : U forall U
-      block.call(value!)
+    def map_or(default : U, lambda : T -> U) forall U
+      lambda.call(value!)
     end
   end
 
   struct Nothing(T) < Maybe(T)
-
-    def fmap(&block : T -> U) : Nothing(U) forall U
+    def fmap(lambda : _ -> U) : Nothing forall U
       Nothing(U).new
     end
 
@@ -93,23 +86,20 @@ module Monads
       -1
     end
 
-    def bind(&block : T -> Maybe(U)) : Maybe(U) forall U
+    def bind(lambda : _ -> U) : Nothing forall U
       Nothing(U).new
     end
 
-    def value_or(default : T) : T
+    def value_or(default : U) forall U
+      print(default)
       default
     end
 
-    def value_or(&block : -> T) : T
-      block.call
-    end
-
-    def or(default : Maybe(T)) : Maybe(T)
+    def or(default : Maybe)
       default
     end
 
-    def map_or(default : U, &block : T -> U) : U forall U
+    def map_or(default : U, lambda : _ -> _) forall U
       default
     end
   end

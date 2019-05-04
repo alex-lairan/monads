@@ -39,11 +39,6 @@ describe Monads::Just do
       monad = Monads::Just.new(1)
       monad.value_or(5).should eq(1)
     end
-
-    it "export value (block)" do
-      monad = Monads::Just.new(1)
-      monad.value_or { 5 }.should eq(1)
-    end
   end
 
   describe "#or" do
@@ -55,27 +50,22 @@ describe Monads::Just do
   end
 
   describe "#bind" do
-    it "export value (block)" do
-      monad = Monads::Just.new(1)
-      monad.bind { |value| Monads::Just.new(value + 1) }.should eq(Monads::Just.new(2))
-    end
-
     it "export value (proc)" do
-      monad = Monads::Just.new(1)
-      monad.bind(&->(value : Int32){ Monads::Just.new(value + 1) }).should eq(Monads::Just.new(2))
+      monad = Monads::Just.new(1).bind(->(value : Int32) { Monads::Just.new(value + 1) })
+      monad.should eq(Monads::Just.new(2))
     end
   end
 
   describe "#fmap" do
     it "increase by one" do
-      monad = Monads::Just.new(1).fmap { |value| value + 1 }
+      monad = Monads::Just.new(1).fmap(->(value : Int32) { value + 1 })
       monad.should eq(Monads::Just.new(2))
     end
   end
 
   describe "#map_or" do
     it "apply function in the case of Just" do
-      monad = Monads::Just.new(2).map_or(-1) { |value| value + 1 }
+      monad = Monads::Just.new(2).map_or(-1, ->(value : Int32) { value + 1 })
       monad.should eq(3)
     end
   end
