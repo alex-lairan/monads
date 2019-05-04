@@ -1,8 +1,7 @@
 require "./monad"
 
 module Monads
-  module Either(E, T)
-    include Monads::Monad(T)
+  abstract class Either(E, T) < Monad(T)
     include Comparable(Either)
 
     def value!
@@ -31,11 +30,11 @@ module Monads
 
     abstract def bind(&block : T -> Either(E, U)) forall U
     abstract def fmap(&block : T -> U) : Either forall U
-    abstract def <=>(other : Either)
+    abstract def <=>(other : Right)
+    abstract def <=>(other : Left)
   end
 
-  class Right(T)
-    include Either(Nil, T)
+  class Right(T) < Either(Nil, T)
 
     def initialize(@data : T)
     end
@@ -69,8 +68,7 @@ module Monads
     end
   end
 
-  class Left(E)
-    include Either(E, Nil)
+  class Left(E) < Either(E, Nil)
 
     def initialize(@data : E)
     end

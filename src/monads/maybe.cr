@@ -1,9 +1,8 @@
 require "./monad"
 
 module Monads
-  module Maybe(T)
+  abstract class Maybe(T) < Monads::Monad(T)
     include Comparable(Maybe)
-    include Monads::Monad(T)
 
     def just?
       typeof(self) == Just(T)
@@ -21,7 +20,8 @@ module Monads
       io << to_s
     end
 
-    abstract def <=>(other : Maybe(T))
+    abstract def <=>(other : Nothing)
+    abstract def <=>(other : Just)
     abstract def to_s
     abstract def or(default : Maybe(T)) : Maybe(T)
     abstract def value_or(default : T) : T
@@ -29,8 +29,7 @@ module Monads
     abstract def map_or(default : U, &block : T -> U) : U forall U
   end
 
-  class Just(T)
-    include Maybe(T)
+  class Just(T) < Maybe(T)
 
     def initialize(@data : T)
     end
@@ -47,13 +46,12 @@ module Monads
       "#{typeof(self)}{#{value!.inspect}}"
     end
 
-    def <=>(other : Maybe(T))
-      case other
-      when Just(T)
-        value! <=> other.value!
-      else
-        1
-      end
+    def <=>(other : Just)
+      value! <=> other.value!
+    end
+
+    def <=>(ohter : Nothing)
+      1
     end
 
     def bind(&block : T -> Maybe(U)) : Maybe(U) forall U
@@ -77,8 +75,7 @@ module Monads
     end
   end
 
-  class Nothing(T)
-    include Maybe(T)
+  class Nothing(T) < Maybe(T)
 
     def fmap(&block : T -> U) : Nothing(U) forall U
       Nothing(U).new
