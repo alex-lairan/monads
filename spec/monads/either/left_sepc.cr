@@ -177,4 +177,11 @@ describe Monads::Left do
       monad.should eq(Monads::Left.new(1))
     end
   end
+
+  describe "#map_or" do
+    it "#map_or return argument" do
+      value = Monads::Left.new("123").map_or('a', ->(x : String) { x[0] })
+      value.should eq('a')
+    end
+  end
 end

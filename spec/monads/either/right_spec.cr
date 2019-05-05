@@ -185,4 +185,11 @@ describe Monads::Right do
       monad.should eq(Monads::Right.new(1))
     end
   end
+
+  describe "#map_or" do
+    it "#map_or applies lambda to self.value! and return" do
+      value = Monads::Right.new("abc").map_or('b', ->(x : String) { x[0] })
+      value.should eq('a')
+    end
+  end
 end
