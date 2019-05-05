@@ -35,10 +35,16 @@ describe Monads::Nothing do
   end
 
   describe "#or" do
-    it "result himself" do
+    it "result exclude" do
       monad = Monads::Nothing(String).new
       exclude = Monads::Just.new("Foo")
       monad.or(exclude).should eq(exclude)
+    end
+
+    it "result exclude result" do
+      monad = Monads::Nothing(Int32).new
+      exclude = Monads::Just.new(3)
+      monad.or(-> { exclude }).should eq(exclude)
     end
   end
 

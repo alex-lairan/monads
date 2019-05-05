@@ -64,6 +64,10 @@ module Monads
       Just.new(value!)
     end
 
+    def or(lambda : -> _) : Maybe(T)
+      Just.new(value!)
+    end
+
     def map_or(default : U, lambda : T -> U) forall U
       lambda.call(value!)
     end
@@ -97,6 +101,10 @@ module Monads
 
     def or(default : Maybe)
       default
+    end
+
+    def or(lambda : -> _)
+      lambda.call
     end
 
     def map_or(default : U, lambda : _ -> _) forall U
