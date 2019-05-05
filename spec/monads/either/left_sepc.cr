@@ -169,6 +169,11 @@ describe Monads::Left do
       monad = Monads::Left.new(1).or(Monads::Right.new('a'))
       monad.should eq(Monads::Right.new('a'))
     end
+
+    it "#or return argument with block" do
+      monad = Monads::Left.new(1).or(->(_value : Int32) { Monads::Right.new('a') })
+      monad.should eq(Monads::Right.new('a'))
+    end
   end
 
   describe "#bind" do

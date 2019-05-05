@@ -170,6 +170,11 @@ describe Monads::Right do
       monad = Monads::Right.new(1).or(Monads::Right.new('a'))
       monad.should eq(Monads::Right.new(1))
     end
+
+    it "#or return self with block" do
+      monad = Monads::Right.new(1).or(->(_value : Int32) { Monads::Right.new('a') })
+      monad.should eq(Monads::Right.new(1))
+    end
   end
 
   describe "#bind" do
