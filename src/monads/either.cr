@@ -32,6 +32,7 @@ module Monads
     abstract def or(monad : Either)
     abstract def <=>(other : Right)
     abstract def <=>(other : Left)
+    abstract def map_or(default : U, lambda : T -> U) : U forall U
   end
 
   struct Right(T) < Either(Nil, T)
@@ -61,6 +62,10 @@ module Monads
     def bind(lambda : T -> Either(E, U)) forall E, U
       lambda.call(self.value!)
     end
+
+    def map_or(default : U, lambda : T -> U) : U forall U
+      lambda.call(value!)
+    end
   end
 
   struct Left(E) < Either(E, Nil)
@@ -89,6 +94,10 @@ module Monads
 
     def bind(lambda : _ -> _) : Left(E)
       self
+    end
+
+    def map_or(default : U, lambda : _ -> _) : U forall U
+      default
     end
   end
 end
