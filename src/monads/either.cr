@@ -63,7 +63,7 @@ module Monads
       self
     end
 
-    def bind(lambda : T -> Either(E, U)) forall E, U
+    def bind(lambda : T -> Either(_, _))
       lambda.call(self.value!)
     end
 
