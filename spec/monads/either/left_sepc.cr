@@ -60,6 +60,11 @@ describe Monads::Left do
       monad = Monads::Left.new(1)
       monad.value_or(5).should eq(5)
     end
+
+    it "export value (unit)" do
+      monad = Monads::Left.new(1)
+      monad.value_or(->(x : Int32) { x + 1 }).should eq(2)
+    end
   end
 
   describe "#fmap" do

@@ -61,6 +61,11 @@ describe Monads::Right do
       monad = Monads::Right.new(1)
       monad.value_or(5).should eq(1)
     end
+
+    it "export value (unit) with block" do
+      monad = Monads::Right.new(1)
+      monad.value_or(-> { 5 }).should eq(1)
+    end
   end
 
   describe "#fmap" do
