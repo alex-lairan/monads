@@ -47,6 +47,12 @@ describe Monads::Just do
       exclude = Monads::Just.new(3)
       monad.or(exclude).should eq(monad)
     end
+
+    it "result himself with lambda" do
+      monad = Monads::Just.new(1)
+      exclude = Monads::Just.new(3)
+      monad.or(-> { exclude }).should eq(monad)
+    end
   end
 
   describe "#bind" do
