@@ -32,11 +32,6 @@ describe Monads::Nothing do
       monad = Monads::Nothing(Int32).new
       monad.value_or(5).should eq(5)
     end
-
-    it "export value (block)" do
-      monad = Monads::Nothing(Int32).new
-      monad.value_or { 5 }.should eq(5)
-    end
   end
 
   describe "#or" do
@@ -48,27 +43,22 @@ describe Monads::Nothing do
   end
 
   describe "#bind" do
-    it "export value (block)" do
-      monad = Monads::Nothing(Int32).new
-      monad.bind { |value| Monads::Maybe.return(value + 1) }.should eq(monad)
-    end
-
     it "export value (proc)" do
-      monad = Monads::Nothing(Int32).new
-      monad.bind(&->(value : Int32){ Monads::Maybe.return(value + 1) }).should eq(monad)
+      monad = Monads::Nothing(Int32).new.bind(->(value : Int32) { Monads::Maybe.return(value + 1) })
+      monad.should eq(monad)
     end
   end
 
   describe "#fmap" do
     it "not increase by one" do
-      monad = Monads::Nothing(String).new.fmap { |value| value + "added" }
+      monad = Monads::Nothing(String).new.fmap(->(value : Int32) { value + 1 })
       monad.should eq(Monads::Nothing(String).new)
     end
   end
 
   describe "#map_or" do
     it "return default value in the case of Nothign" do
-      monad = Monads::Nothing(Int32).new.map_or(-1) { |value| value + 1 }
+      monad = Monads::Nothing(Int32).new.map_or(-1, ->(value : Int32) { value + 1 })
       monad.should eq(-1)
     end
   end

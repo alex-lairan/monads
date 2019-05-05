@@ -7,6 +7,6 @@ module Monads
       raise NotImplementedError.new("implement `#{Monad(T)}::return` method")
     end
 
-    abstract def bind(&block : T -> Monad(U)) : Monad(U) forall U
+    abstract def bind(lambda : T -> Monad(U)) : Monad(U) forall U
   end
 end

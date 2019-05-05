@@ -60,16 +60,11 @@ describe Monads::Left do
       monad = Monads::Left.new(1)
       monad.value_or(5).should eq(5)
     end
-
-    it "export value (block)" do
-      monad = Monads::Left.new(1)
-      monad.value_or { 5 }.should eq(5)
-    end
   end
 
   describe "#fmap" do
     it "not increase by one" do
-      monad = Monads::Left.new(1).fmap { |value| value + 1 }
+      monad = Monads::Left.new(1).fmap(->(value : String) { value + "a" })
       monad.should eq(Monads::Left.new(1))
     end
   end
@@ -178,7 +173,7 @@ describe Monads::Left do
 
   describe "#bind" do
     it "#bind return self" do
-      monad = Monads::Left.new(1).bind {|x| Monads::Right.new(x.to_s)}
+      monad = Monads::Left.new(1).bind(->(x : Int32) { Monads::Right.new(x.to_s) })
       monad.should eq(Monads::Left.new(1))
     end
   end

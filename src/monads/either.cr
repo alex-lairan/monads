@@ -4,7 +4,7 @@ module Monads
   abstract struct Either(E, T) < Monad(T)
     include Comparable(Either)
 
-    def value!
+    def value! : E | T
       @data
     end
 
@@ -24,24 +24,22 @@ module Monads
       io << to_s
     end
 
-    def self.return(value : T)
+    def self.return(value : T) : Right(T)
       Right.new(value)
     end
 
-    abstract def value_or(element)
-    abstract def value_or(&block : -> U) forall U
+    abstract def value_or(element : U) : T | U forall U
     abstract def or(monad : Either)
     abstract def <=>(other : Right)
     abstract def <=>(other : Left)
   end
 
   struct Right(T) < Either(Nil, T)
-
     def initialize(@data : T)
     end
 
-    def fmap(&block : T -> U) : Either forall U
-      Right.new(block.call(@data))
+    def fmap(lambda : T -> U) : Right(U) forall U
+      Right.new(lambda.call(@data))
     end
 
     def <=>(other : Right)
@@ -52,11 +50,7 @@ module Monads
       1
     end
 
-    def value_or(element)
-      value!
-    end
-
-    def value_or(&block : -> U) : U | T forall U
+    def value_or(element : _)
       value!
     end
 
@@ -64,8 +58,8 @@ module Monads
       self
     end
 
-    def bind(&block : T -> Either(E, U)) forall E, U
-      block.call(self.value!)
+    def bind(lambda : T -> Either(E, U)) forall E, U
+      lambda.call(self.value!)
     end
   end
 
@@ -73,7 +67,7 @@ module Monads
     def initialize(@data : E)
     end
 
-    def fmap(&block : E -> U) : Either forall U
+    def fmap(lambda : _ -> _) : Left(E)
       self
     end
 
@@ -85,19 +79,15 @@ module Monads
       -1
     end
 
-    def value_or(element)
+    def value_or(element : U) forall U
       element
-    end
-
-    def value_or(&block : -> U) : U | E forall U
-      block.call
     end
 
     def or(monad : Either)
       monad
     end
 
-    def bind(&block : T -> Either(F, U)) forall T, U, F
+    def bind(lambda : _ -> _) : Left(E)
       self
     end
   end

@@ -61,16 +61,11 @@ describe Monads::Right do
       monad = Monads::Right.new(1)
       monad.value_or(5).should eq(1)
     end
-
-    it "export value (block)" do
-      monad = Monads::Right.new(1)
-      monad.value_or { 5 }.should eq(1)
-    end
   end
 
   describe "#fmap" do
     it "increase by one" do
-      monad = Monads::Right.new(1).fmap { |value| value + 1 }
+      monad = Monads::Right.new(1).fmap(->(value : Int32) { value + 1 })
       monad.should eq(Monads::Right.new(2))
     end
   end
@@ -179,7 +174,7 @@ describe Monads::Right do
 
   describe "#bind" do
     it "#bind apply block" do
-      monad = Monads::Right.new(1).bind {|x| Monads::Right.new(x.to_s)}
+      monad = Monads::Right.new(1).bind(->(x : Int32) { Monads::Right.new(x.to_s) })
       monad.should eq(Monads::Right.new("1"))
     end
   end
