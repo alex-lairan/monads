@@ -88,6 +88,10 @@ module Monads
       -1
     end
 
+    def value_or(lambda : E -> _)
+      lambda.call(@data)
+    end
+
     def value_or(element : U) forall U
       element
     end
