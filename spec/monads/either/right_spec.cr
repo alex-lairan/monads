@@ -61,6 +61,11 @@ describe Monads::Right do
       monad = Monads::Right.new(1)
       monad.value_or(5).should eq(1)
     end
+
+    it "export value (unit) with block" do
+      monad = Monads::Right.new(1)
+      monad.value_or(-> { 5 }).should eq(1)
+    end
   end
 
   describe "#fmap" do
@@ -168,6 +173,11 @@ describe Monads::Right do
   describe "#or" do
     it "#or return self" do
       monad = Monads::Right.new(1).or(Monads::Right.new('a'))
+      monad.should eq(Monads::Right.new(1))
+    end
+
+    it "#or return self with block" do
+      monad = Monads::Right.new(1).or(->(_value : Int32) { Monads::Right.new('a') })
       monad.should eq(Monads::Right.new(1))
     end
   end

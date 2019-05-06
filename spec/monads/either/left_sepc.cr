@@ -60,6 +60,11 @@ describe Monads::Left do
       monad = Monads::Left.new(1)
       monad.value_or(5).should eq(5)
     end
+
+    it "export value (unit)" do
+      monad = Monads::Left.new(1)
+      monad.value_or(->(x : Int32) { x + 1 }).should eq(2)
+    end
   end
 
   describe "#fmap" do
@@ -167,6 +172,11 @@ describe Monads::Left do
   describe "#or" do
     it "#or return argument" do
       monad = Monads::Left.new(1).or(Monads::Right.new('a'))
+      monad.should eq(Monads::Right.new('a'))
+    end
+
+    it "#or return argument with block" do
+      monad = Monads::Left.new(1).or(->(_value : Int32) { Monads::Right.new('a') })
       monad.should eq(Monads::Right.new('a'))
     end
   end

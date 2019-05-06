@@ -59,6 +59,10 @@ module Monads
       self
     end
 
+    def or(lambda : _ -> _) : Right(T)
+      self
+    end
+
     def bind(lambda : T -> Either(E, U)) forall E, U
       lambda.call(self.value!)
     end
@@ -84,12 +88,20 @@ module Monads
       -1
     end
 
+    def value_or(lambda : E -> _)
+      lambda.call(@data)
+    end
+
     def value_or(element : U) forall U
       element
     end
 
     def or(monad : Either)
       monad
+    end
+
+    def or(lambda : E -> _)
+      lambda.call(@data)
     end
 
     def bind(lambda : _ -> _) : Left(E)
