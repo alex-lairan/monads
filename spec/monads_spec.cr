@@ -3,6 +3,6 @@ require "./monads/**"
 
 describe Monads do
   it "should have version" do
-    Monads::VERSION.should eq("0.2.0")
+    Monads::VERSION.should eq("0.3.0")
   end
 end

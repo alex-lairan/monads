@@ -8,5 +8,5 @@ module Monads
   # - Update Readme
   # - Try monad
   # - Task monad
-  VERSION = "0.2.0"
+  VERSION = "0.3.0"
 end
