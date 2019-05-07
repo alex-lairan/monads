@@ -3,6 +3,16 @@ require "./monad"
 
 module Monads
   struct List(T) < Monad(T)
+    # create new List
+    #
+    # ```
+    # Monads::List[1,2,3] == Monads::List.new([1,2,3])
+    # ```
+    macro [](*args)
+      %array = Monads::List.new({{args}}.to_a)
+      %array
+    end
+
     def initialize(@value : Array(T))
     end
 
