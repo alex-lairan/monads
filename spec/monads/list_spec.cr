@@ -22,8 +22,15 @@ describe Monads::List do
 
   describe "#fmap" do
     it "increase by one" do
-      list = Monads::List.new([1, 2, 3]).fmap { |value| value + 1 }
+      list = Monads::List.new([1, 2, 3]).fmap(->(x : Int32) { x + 1 })
       list.should eq(Monads::List.new([2, 3, 4]))
+    end
+  end
+
+  describe "#bind" do
+    it "#bind return list monad" do
+      list = Monads::List.new([1,2,3]).bind(->(x : Int32) { Monads::List.new([x.to_s]) })
+      list.should eq(Monads::List.new(["1", "2", "3"]))
     end
   end
 
