@@ -1,4 +1,5 @@
 require "./maybe"
+require "./monad"
 
 module Monads
   struct List(T) < Monad(T)
@@ -19,8 +20,12 @@ module Monads
       value == rhs.value
     end
 
-    def fmap(&block : T -> U) : List(U) forall U
-      List.new(@value.map { |value| block.call(value) })
+    def fmap(lambda : T -> U) forall U
+      List.new(@value.map { |value| lambda.call(value) })
+    end
+
+    def bind(lambda : T -> List(U)) forall U
+      @value.map { |value| lambda.call(value) }.sum(List.new([] of U))
     end
 
     def value : Array(T)
