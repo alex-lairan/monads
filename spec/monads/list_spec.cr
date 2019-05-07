@@ -1,6 +1,12 @@
 require "../spec_helper"
 
 describe Monads::List do
+  describe "macro [](*args)" do
+    it "[] macro return new List" do
+      Monads::List[1,2,3].should eq(Monads::List.new([1,2,3]))
+    end
+  end
+
   describe "#==" do
     it "equal for same values" do
       boolean = Monads::List.new([1, 2, 3]) == Monads::List.new([1, 2, 3])
