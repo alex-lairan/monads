@@ -20,11 +20,11 @@ module Monads
     end
 
     def <=>(rhs : List)
-      value <=> rhs.value
+      @value <=> rhs.value
     end
 
     def unsafe_fetch(index : Int)
-      value[index]
+      @value.unsafe_fetch(index)
     end
 
     def size
