@@ -9,12 +9,72 @@ describe Monads::List do
 
   describe "#==" do
     it "equal for same values" do
-      boolean = Monads::List.new([1, 2, 3]) == Monads::List.new([1, 2, 3])
+      boolean = Monads::List[1, 2, 3] == Monads::List[1.0, 2, 3]
       boolean.should be_truthy
     end
 
     it "not equal for differents values" do
-      boolean = Monads::List.new([1, 2]) == Monads::List.new([2, 3])
+      boolean = Monads::List[1, 2] == Monads::List[2, 3]
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#!=" do
+    it "'List[1,2,3] != List[1,2,3]' is invalid" do
+      boolean = Monads::List[1,2,3] != Monads::List[1,2,3]
+      boolean.should be_falsey
+    end
+
+    it "'List[1,2,3] != List[1,3,4]' is valid" do
+      boolean = Monads::List[1,2,3] != Monads::List[1,2,4]
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#<" do
+    it "'List[1,2,3] < List[1,2,3]' is invalid" do
+      boolean = Monads::List[1,2,3] < Monads::List[1,2,3]
+      boolean.should be_falsey
+    end
+
+    it "'List[1,2,3] < List[2,3,4]' is valid" do
+      boolean = Monads::List[1,2,3] < Monads::List[2,3,4]
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#>" do
+    it "'List[1,2,3] > List[0,1,0]' is valid" do
+      boolean = Monads::List[1,2,3] > Monads::List[0,1,0]
+      boolean.should be_truthy
+    end
+
+    it "'List[1,2,3] > List[2,3,4]' is invalid" do
+      boolean = Monads::List[1,2,3] > Monads::List[2,3,4]
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#>=" do
+    it "'List[1,2,3] >= List[1,2,2]' is valid" do
+      boolean = Monads::List[1,2,3] >= Monads::List[1,2,2]
+      boolean.should be_truthy
+    end
+
+    it "'List[1,2,3] >= List[1,2,4]' is invalid" do
+      boolean = Monads::List[1,2,3] >= Monads::List[1,2,4]
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#<=" do
+    it "'List[1,2,3] >= List[1,2,2]' is valid" do
+      boolean = Monads::List[1,2,3] >= Monads::List[1,2,2]
+      boolean.should be_truthy
+    end
+
+    it "'List[1,2,3] >= List[1,2,4]' is invalid" do
+      boolean = Monads::List[1,2,3] >= Monads::List[1,2,4]
       boolean.should be_falsey
     end
   end

@@ -3,6 +3,8 @@ require "./monad"
 
 module Monads
   struct List(T) < Monad(T)
+    include Comparable(List)
+
     # create new List
     #
     # ```
@@ -16,8 +18,8 @@ module Monads
     def initialize(@value : Array(T))
     end
 
-    def ==(rhs : List(T))
-      value == rhs.value
+    def <=>(rhs : List)
+      value <=> rhs.value
     end
 
     def fmap(lambda : T -> U) forall U
