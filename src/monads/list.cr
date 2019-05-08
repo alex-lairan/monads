@@ -39,12 +39,8 @@ module Monads
       value.map { |value| lambda.call(value) }.sum(List.new([] of U))
     end
 
-    def value : Array(T)
-      @value
-    end
-
-    def +(rhs : List(T)) : List(T)
-      List.new(@value + rhs.value)
+    def +(rhs : List) : List
+      List.new(@value + rhs.to_a)
     end
 
     def head : Maybe(T)
