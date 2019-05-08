@@ -20,7 +20,7 @@ module Monads
     end
 
     def <=>(rhs : List)
-      @value <=> rhs.value
+      @value <=> rhs.to_a
     end
 
     def unsafe_fetch(index : Int)
