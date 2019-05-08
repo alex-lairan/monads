@@ -36,7 +36,7 @@ module Monads
     end
 
     def bind(lambda : T -> List(U)) forall U
-      value.map { |value| lambda.call(value) }.sum(List.new([] of U))
+      @value.map { |value| lambda.call(value) }.sum(List.new([] of U))
     end
 
     def +(rhs : List) : List
@@ -49,7 +49,7 @@ module Monads
     end
 
     def tail : List(T)
-      return List.new(Array(T).new) if value.size < 2
+      return List.new(Array(T).new) if @value.size < 2
       List.new(@value[1..-1])
     end
   end
