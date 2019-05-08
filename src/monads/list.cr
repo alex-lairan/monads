@@ -4,6 +4,7 @@ require "./monad"
 module Monads
   struct List(T) < Monad(T)
     include Comparable(List)
+    include Indexable(T)
 
     # create new List
     #
@@ -19,7 +20,15 @@ module Monads
     end
 
     def <=>(rhs : List)
-      value <=> rhs.value
+      @value <=> rhs.to_a
+    end
+
+    def unsafe_fetch(index : Int)
+      @value.unsafe_fetch(index)
+    end
+
+    def size
+      @value.size
     end
 
     def fmap(lambda : T -> U) forall U
@@ -30,12 +39,8 @@ module Monads
       @value.map { |value| lambda.call(value) }.sum(List.new([] of U))
     end
 
-    def value : Array(T)
-      @value
-    end
-
-    def +(rhs : List(T)) : List(T)
-      List.new(@value + rhs.value)
+    def +(rhs : List) : List
+      List.new(@value + rhs.to_a)
     end
 
     def head : Maybe(T)
@@ -44,7 +49,7 @@ module Monads
     end
 
     def tail : List(T)
-      return List.new(Array(T).new) if value.size < 2
+      return List.new(Array(T).new) if @value.size < 2
       List.new(@value[1..-1])
     end
   end

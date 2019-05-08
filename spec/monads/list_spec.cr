@@ -31,6 +31,13 @@ describe Monads::List do
     end
   end
 
+  describe "#[]" do
+    it "List[1,2,3][2] == 3" do
+      value = Monads::List[1,2,3][2]
+      value.should eq(3)
+    end
+  end
+
   describe "#<" do
     it "'List[1,2,3] < List[1,2,3]' is invalid" do
       boolean = Monads::List[1,2,3] < Monads::List[1,2,3]
@@ -97,13 +104,6 @@ describe Monads::List do
     it "#bind return list monad" do
       list = Monads::List.new([1,2,3]).bind(->(x : Int32) { Monads::List.new([x.to_s]) })
       list.should eq(Monads::List.new(["1", "2", "3"]))
-    end
-  end
-
-  describe "#value" do
-    it "equal the same array" do
-      list = Monads::List.new([1, 2, 3])
-      list.value.should eq([1, 2, 3])
     end
   end
 
