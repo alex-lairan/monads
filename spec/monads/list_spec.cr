@@ -31,6 +31,13 @@ describe Monads::List do
     end
   end
 
+  describe "#[]" do
+    it "List[1,2,3][2] == 3" do
+      value = Monads::List[1,2,3][2]
+      value.should eq(3)
+    end
+  end
+
   describe "#<" do
     it "'List[1,2,3] < List[1,2,3]' is invalid" do
       boolean = Monads::List[1,2,3] < Monads::List[1,2,3]

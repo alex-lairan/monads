@@ -4,6 +4,7 @@ require "./monad"
 module Monads
   struct List(T) < Monad(T)
     include Comparable(List)
+    include Indexable(T)
 
     # create new List
     #
@@ -22,12 +23,20 @@ module Monads
       value <=> rhs.value
     end
 
+    def unsafe_fetch(index : Int)
+      value[index]
+    end
+
+    def size
+      @value.size
+    end
+
     def fmap(lambda : T -> U) forall U
       List.new(@value.map { |value| lambda.call(value) })
     end
 
     def bind(lambda : T -> List(U)) forall U
-      @value.map { |value| lambda.call(value) }.sum(List.new([] of U))
+      value.map { |value| lambda.call(value) }.sum(List.new([] of U))
     end
 
     def value : Array(T)
