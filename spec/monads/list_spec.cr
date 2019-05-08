@@ -107,13 +107,6 @@ describe Monads::List do
     end
   end
 
-  describe "#value" do
-    it "equal the same array" do
-      list = Monads::List.new([1, 2, 3])
-      list.value.should eq([1, 2, 3])
-    end
-  end
-
   describe "#head" do
     it "get first value" do
       list = Monads::List.new([1, 2, 3])
