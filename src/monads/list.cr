@@ -27,6 +27,14 @@ module Monads
       @value.unsafe_fetch(index)
     end
 
+    def to_s
+      "#{typeof(self)}#{@value.inspect}"
+    end
+
+    def inspect(io)
+      io << to_s
+    end
+
     def size
       @value.size
     end

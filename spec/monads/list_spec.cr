@@ -137,4 +137,18 @@ describe Monads::List do
       boolean.should be_truthy
     end
   end
+
+  describe "#to_s" do
+    it "List[1,\"a\",'a'].to_s == \"List(Char | Int32 | String)[1, \"a\", 'a']\"" do
+      boolean = Monads::List[1,"a",'a'].to_s == "Monads::List(Char | Int32 | String)[1, \"a\", 'a']"
+      boolean.should be_truthy
+    end
+  end
+
+  describe "#inspect" do
+    it "List[1].inspect == \"List(String)[1]\"" do
+      boolean = Monads::List[1].inspect == "Monads::List(Int32)[1]"
+      boolean.should be_truthy
+    end
+  end
 end
