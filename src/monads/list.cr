@@ -28,7 +28,7 @@ module Monads
     end
 
     def to_s
-      "#{typeof(self)}#{@value}"
+      "#{typeof(self)}#{@value.inspect}"
     end
 
     def inspect(io)
