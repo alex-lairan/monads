@@ -39,6 +39,10 @@ module Monads
       @value.map { |value| lambda.call(value) }.sum(List.new([] of U))
     end
 
+    def self.return(value)
+      List[value]
+    end
+
     def +(rhs : List) : List
       List.new(@value + rhs.to_a)
     end

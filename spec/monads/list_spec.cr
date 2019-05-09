@@ -130,4 +130,11 @@ describe Monads::List do
       list.tail.should eq(Monads::List.new(Array(Int32).new))
     end
   end
+
+  describe "List.return" do
+    it "List.return(1) == List[1]" do
+      boolean = Monads::List.return(1) == Monads::List[1]
+      boolean.should be_truthy
+    end
+  end
 end
