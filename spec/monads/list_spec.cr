@@ -151,4 +151,23 @@ describe Monads::List do
       boolean.should be_truthy
     end
   end
+
+  describe "#empty?" do
+    it "List[].empty? == true" do
+      boolean = Monads::List.new([] of Int32).empty?
+      boolean.should be_truthy
+    end
+
+    it "Listp[1].empty? == false" do
+      boolean = Monads::List[1].empty?
+      boolean.should be_falsey
+    end
+  end
+
+  describe "#last" do
+    it "List[1,2,3].last == 3" do
+      value = Monads::List[1,2,3].last
+      value.should eq(3)
+    end
+  end
 end

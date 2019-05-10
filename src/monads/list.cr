@@ -39,6 +39,14 @@ module Monads
       @value.size
     end
 
+    def empty?
+      @value.size == 0
+    end
+
+    def last
+      @value.last
+    end
+
     def fmap(lambda : T -> U) forall U
       List.new(@value.map { |value| lambda.call(value) })
     end
