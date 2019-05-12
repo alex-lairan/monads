@@ -1,5 +1,6 @@
 require "./maybe"
 require "./monad"
+require "big"
 
 module Monads
   struct List(T) < Monad(T)
@@ -41,6 +42,28 @@ module Monads
 
     def empty?
       @value.size == 0
+    end
+
+    def join(sep = "")
+      @value.join(sep)
+    end
+
+    def subsequences
+      List.new(
+        (1..size).reduce([List.new([] of T)]) { |acc, i|
+          acc + @value.permutations(i).map { |x|
+            List.new(x)
+          }
+        }
+      )
+    end
+
+    def permutations
+      List.new(
+        @value.permutations.map { |x|
+          List.new(x)
+        }
+      )
     end
 
     def last

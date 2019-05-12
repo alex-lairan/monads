@@ -158,7 +158,7 @@ describe Monads::List do
       boolean.should be_truthy
     end
 
-    it "Listp[1].empty? == false" do
+    it "List[1].empty? == false" do
       boolean = Monads::List[1].empty?
       boolean.should be_falsey
     end
@@ -168,6 +168,95 @@ describe Monads::List do
     it "List[1,2,3].last == 3" do
       value = Monads::List[1,2,3].last
       value.should eq(3)
+    end
+  end
+
+  describe "#join" do
+    it "List[1,2,3].join(\",\") == \"1,2,3\"" do
+      value = Monads::List[1,2,3].join(",")
+      value.should eq("1,2,3")
+    end
+
+    it "List[1,2,3].join(',') == \"1,2,3\"" do
+      value = Monads::List[1,2,3].join(',')
+      value.should eq("1,2,3")
+    end
+
+    it "List[1,2,3].join == \"123\"" do
+      value = Monads::List[1,2,3].join
+      value.should eq("123")
+    end
+
+    it "List[].join == \"\"" do
+      value = Monads::List.new([] of Int32).join
+      value.should eq("")
+    end
+
+    it "List[].join(\",\") == \"\"" do
+      value = Monads::List.new([] of Int32).join(",")
+      value.should eq("")
+    end
+
+    it "List[1].join == \"1\"" do
+      value = Monads::List[1].join
+      value.should eq("1")
+    end
+
+    it "List[1].join(\",\") == \"1\"" do
+      value = Monads::List[1].join(",")
+      value.should eq("1")
+    end
+  end
+
+  describe "#subsequences" do
+    it "List[1,2].subsequences == List[List[], List[1], List[2], List[1,2], List[2,1]]" do
+      value = Monads::List[1,2].subsequences
+      value.should eq(Monads::List[
+        Monads::List.new([] of Int32),
+        Monads::List[1],
+        Monads::List[2],
+        Monads::List[1,2],
+        Monads::List[2,1]
+      ])
+    end
+
+    it "List[].subsequences == List[List[]]" do
+      value = Monads::List.new([] of Int32).subsequences
+      value.should eq(Monads::List[
+        Monads::List.new([] of Int32)
+      ])
+    end
+
+    it "List[1].subsequences == List[List[], List[1]]" do
+      value = Monads::List[1].subsequences
+      value.should eq(Monads::List[
+        Monads::List.new([] of Int32),
+        Monads::List[1]
+      ])
+    end
+  end
+
+  describe "#permutations" do
+    it "List[].permutations == List[List[]]" do
+      value = Monads::List.new([] of Int32).permutations
+      value.should eq(Monads::List[
+        Monads::List.new([] of Int32)
+      ])
+    end
+
+    it "List[1].permutations == List[List[1]]" do
+      value = Monads::List[1].permutations
+      value.should eq(Monads::List[
+        Monads::List[1]
+      ])
+    end
+
+    it "List[1, 2].permutations == List[List[1,2], List[2,1]]" do
+      value = Monads::List[1,2].permutations
+      value.should eq(Monads::List[
+        Monads::List[1,2],
+        Monads::List[2,1]
+      ])
     end
   end
 end
