@@ -259,4 +259,21 @@ describe Monads::List do
       ])
     end
   end
+
+  describe "#reverse" do
+    it "List[1,2,3].reverse == List[3,2,1]" do
+      value = Monads::List[1,2,3].reverse
+      value.should eq(Monads::List[3,2,1])
+    end
+
+    it "List[].reverse == List[]" do
+      value = Monads::List.new([] of Int32).reverse
+      value.should eq(Monads::List.new([] of Int32))
+    end
+
+    it "List[1].reverse == List[1]" do
+      value = Monads::List[1].reverse
+      value.should eq(Monads::List[1])
+    end
+  end
 end
