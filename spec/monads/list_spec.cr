@@ -276,4 +276,25 @@ describe Monads::List do
       value.should eq(Monads::List[1])
     end
   end
+
+  describe "#next" do
+    it "List[1].next == 1" do
+      value = Monads::List[1].next
+      value.should eq(1)
+    end
+
+    it "List[].next == Iterator::Stop::INSTANCE" do
+      value = Monads::List.new([] of Int32).next
+      value.should eq(Iterator::Stop::INSTANCE)
+    end
+
+    it "List[1] with two next == Iterator::Stop::INSTANCE" do
+      monad = Monads::List[1]
+      number = monad.next
+      stop = monad.next
+
+      number.should eq(1)
+      stop.should eq(Iterator::Stop::INSTANCE)
+    end
+  end
 end
