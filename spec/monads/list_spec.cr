@@ -297,4 +297,40 @@ describe Monads::List do
       stop.should eq(Iterator::Stop::INSTANCE)
     end
   end
+
+  describe "#sort" do
+    describe "unit" do
+      it "List[].sort == List[]" do
+        value = Monads::List.new([] of Int32).sort
+        value.should eq(Monads::List.new([] of Int32))
+      end
+
+      it "List[1].sort == List[]" do
+        value = Monads::List[1].sort
+        value.should eq(Monads::List[1])
+      end
+
+      it "List[1,3,2].sort == List[]" do
+        value = Monads::List[1,3,2].sort
+        value.should eq(Monads::List[1,2,3])
+      end
+    end
+
+    describe "block" do
+      it "List[].sort { |x, y| x <=> y } == List[]" do
+        value = Monads::List.new([] of Int32).sort { |x, y| x <=> y }
+        value.should eq(Monads::List.new([] of Int32))
+      end
+
+      it "List[1].sort { |x, y| x <=> y } == List[1]" do
+        value = Monads::List[1].sort { |x, y| x <=> y }
+        value.should eq(Monads::List[1])
+      end
+
+      it "List[1,3,2].sort { |x, y| x <=> y } == List[1,2,3]" do
+        value = Monads::List[1,3,2].sort { |x, y| x <=> y }
+        value.should eq(Monads::List[1,2,3])
+      end
+    end
+  end
 end
