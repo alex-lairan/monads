@@ -1,11 +1,11 @@
 require "./maybe"
 require "./monad"
-require "big"
 
 module Monads
   struct List(T) < Monad(T)
     include Comparable(List)
     include Indexable(T)
+    include Iterator(T)
 
     # create new List
     #
@@ -18,6 +18,16 @@ module Monads
     end
 
     def initialize(@value : Array(T))
+      @index = 0
+    end
+
+    def next
+      if @index < size
+        @index += 1
+        @value[@index - 1]
+      else
+        stop
+      end
     end
 
     def <=>(rhs : List)
@@ -94,6 +104,10 @@ module Monads
     def tail : List(T)
       return List.new(Array(T).new) if @value.size < 2
       List.new(@value[1..-1])
+    end
+
+    def reverse : List(T)
+      List.new(@value.reverse)
     end
   end
 end
