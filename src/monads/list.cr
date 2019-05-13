@@ -109,5 +109,13 @@ module Monads
     def reverse : List(T)
       List.new(@value.reverse)
     end
+
+    def sort : List(T)
+      List.new(@value.sort)
+    end
+
+    def sort(&block : T, T -> U) : List(T) forall U
+      List.new(@value.sort(&block))
+    end
   end
 end
