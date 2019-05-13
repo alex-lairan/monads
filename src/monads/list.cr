@@ -117,5 +117,9 @@ module Monads
     def sort(&block : T, T -> U) : List(T) forall U
       List.new(@value.sort(&block))
     end
+
+    def sort_by(&block : T -> _) : List(T)
+      List.new(@value.sort_by(&block))
+    end
   end
 end
