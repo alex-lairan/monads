@@ -1,6 +1,4 @@
-require "./monads/either"
-require "./monads/maybe"
-require "./monads/list"
+require "./monads/*"
 
 module Monads
   # Requirements for 1.0.0
