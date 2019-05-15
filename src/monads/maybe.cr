@@ -52,7 +52,7 @@ module Monads
       1
     end
 
-    def bind(lambda : T -> Just(U)) : Just(U) forall U
+    def bind(lambda : T -> Maybe(_)) : Maybe
       lambda.call(value!)
     end
 
@@ -90,7 +90,7 @@ module Monads
       -1
     end
 
-    def bind(lambda : _ -> U) : Nothing forall U
+    def bind(lambda : _ -> Maybe(U)) : Maybe forall U
       Nothing(U).new
     end
 
