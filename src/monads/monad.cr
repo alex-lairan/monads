@@ -8,5 +8,13 @@ module Monads
     end
 
     abstract def bind(lambda : T -> Monad(U)) : Monad(U) forall U
+
+    def |(other : _ -> Monad(U)) forall U
+      self.bind(other)
+    end
+
+    def >>(other : Monad(U)) forall U
+      other
+    end
   end
 end
