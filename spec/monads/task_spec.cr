@@ -1,11 +1,5 @@
 require "../spec_helper"
 
-class Exception
-  def <=>(other)
-    0
-  end
-end
-
 describe Monads::Task do
   describe "#bind" do
     it "Task have correct element" do
@@ -34,7 +28,7 @@ describe Monads::Task do
 
     it "Monads::Task(Int32).new(-> { 5 / 0 }).to_either is Left" do
       value = Monads::Task(Int32).new(-> { 5 / 0 }).to_either
-      value.should eq(Monads::Left(Exception).new(DivisionByZeroError.new))
+      value.should eq(Monads::LeftException.new(DivisionByZeroError.new))
     end
   end
 end

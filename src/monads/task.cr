@@ -65,7 +65,7 @@ module Monads
     def to_either
       Right.new receive
     rescue exception
-      Left.new exception
+      LeftException.new exception
     end
   end
 end

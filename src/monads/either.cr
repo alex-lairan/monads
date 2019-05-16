@@ -47,7 +47,7 @@ module Monads
       value! <=> other.value!
     end
 
-    def <=>(other : Left)
+    def <=>(other : Leftable)
       1
     end
 
@@ -72,20 +72,9 @@ module Monads
     end
   end
 
-  struct Left(E) < Either(E, Nil)
-    def initialize(@data : E)
-    end
-
-    def fmap(lambda : _ -> _) : Left(E)
+  module Leftable(E)
+    def fmap(lambda : _ -> _) : Leftable(E)
       self
-    end
-
-    def <=>(other : Left)
-      value! <=> other.value!
-    end
-
-    def <=>(other : Right)
-      -1
     end
 
     def value_or(lambda : E -> _)
@@ -104,12 +93,54 @@ module Monads
       lambda.call(@data)
     end
 
-    def bind(lambda : _ -> _) : Left(E)
+    def bind(lambda : _ -> _) : Leftable(E)
       self
     end
 
     def map_or(default : U, lambda : _ -> _) : U forall U
       default
+    end
+  end
+
+  struct Left(E) < Either(E, Nil)
+    include Leftable(E)
+
+    def initialize(@data : E)
+    end
+
+    def <=>(other : LeftException)
+      1
+    end
+
+    def <=>(other : Left)
+      value! <=> other.value!
+    end
+
+    def <=>(other : Right)
+      -1
+    end
+  end
+
+  struct LeftException < Either(Exception, Nil)
+    include Leftable(Exception)
+
+    def initialize(@data : E)
+    end
+
+    def <=>(other : LeftException)
+      if @data.class == other.value!.class
+        0
+      else
+        -1
+      end
+    end
+
+    def <=>(other : Left)
+      -1
+    end
+
+    def <=>(other : Right)
+      -1
     end
   end
 end
