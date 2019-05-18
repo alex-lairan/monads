@@ -5,6 +5,5 @@ module Monads
   # - Documentation
   # - Update Readme
   # - Try monad
-  # - Task monad
   VERSION = "0.3.0"
 end
