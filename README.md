@@ -145,3 +145,4 @@ Clone then let's go, no special requirements.
 ## Contributors
 
 - [alex-lairan](https://github.com/alex-lairan) Alexandre Lairan - creator, maintainer
+- [moba1](https://github.com/moba1) moba - maintainer
