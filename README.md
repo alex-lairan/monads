@@ -3,7 +3,7 @@
 
 Monads for Crystal.
 
-Inspired from https://github.com/dry-rb/dry-monads
+Inspired by https://github.com/dry-rb/dry-monads
 
 ## Installation
 
@@ -21,13 +21,13 @@ dependencies:
 require "monads"
 ```
 
-Many monads exists.
+Many monads exist.
 
 ### Maybe(T)
 
-The *Maybe* monad help to avoid `nil` and chain instructions.
+The *Maybe* monad helps to avoid `nil` and chain instructions.
 
-There is two kind of *Maybe*, `Just` and `Nothing`.
+There are two kinds of *Maybe*, `Just` and `Nothing`.
 
 #### Just(T)
 
@@ -39,7 +39,7 @@ Monads::Just.new(5)
 
 #### Nothing(T)
 
-This a absance of value.
+This is an absence of value.
 
 ```crystal
 Monads::Nothing(Int32).new
@@ -47,9 +47,9 @@ Monads::Nothing(Int32).new
 
 ### Either(E, T)
 
-The *Either* monad help to manage *errors* at the end of the chain instruction.
+The *Either* monad helps to manage *errors* at the end of the chain of instructions.
 
-There is two kind of *Either*, `Right` and `Left`.
+There are two kinds of *Either*, `Right` and `Left`.
 
 #### Right(T)
 
@@ -69,7 +69,7 @@ Monads::Left.new("User password is incorrect")
 
 ### List(T)
 
-The *List* monad help to manipulate an *Array* like a monad.
+The *List* monad helps to manipulate an *Array* like a monad.
 
 ```crystal
 Monads::List[1, 6, 4, 2]
@@ -77,7 +77,7 @@ Monads::List[1, 6, 4, 2]
 
 #### head
 
-`head` returns the first element wrapped with a `Maybe`.
+`head` returns the first element wrapped within a `Maybe`.
 
 #### tail
 
@@ -95,17 +95,17 @@ Its goal is to use the power of fibers with monads.
 
 ### How to use a monad ?
 
-Monads have some methods who help to chain instructions.
+Monads have some methods which help to chain instructions.
 
-ps: `Try` and `Task` monads should be translated into a `Maybe(T)` of an `Either(Exception, T)` one.
+`Try` and `Task` monads should be translated into a `Maybe(T)` or an `Either(Exception, T)` one.
 
 #### fmap
 
-The `fmap` procedure modify internal value of a monad.
+The `fmap` procedure modify the internal value of a monad.
 
-This doesn't affect `Nothing` and `Left` monads. 
+This doesn't affect `Nothing` and `Left` monads.
 
-Example :
+Example:
 
 ```crystal
 value = Monads::Just.new(5)
@@ -118,11 +118,11 @@ value.should eq(512)
 
 #### bind
 
-The `bind` procedure allow to create a whole new monads from the internal data of another.
+The `bind` procedure allows to create a whole new monad from the internal data of another.
 
-This doesn't affect `Nothing` and `Left` monads. 
+This doesn't affect `Nothing` and `Left` monads.
 
-Example :
+Example:
 
 ```crystal
 value = Monads::Just.new(5)
