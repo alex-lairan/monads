@@ -7,4 +7,12 @@ describe Monads::State do
       state.should eq({3, "state"})
     end
   end
+
+  describe "#to_s" do
+    it "State(Int32, String).return(3).to_s == State(Int32, String)@Proc(Int32, Tuple(String, Int32))" do
+      monad = Monads::State(String, Int32).return(3)
+      value = monad.to_s
+      value.should eq("#{typeof(monad)}@#{typeof(monad.transition)}")
+    end
+  end
 end
