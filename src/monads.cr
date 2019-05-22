@@ -3,7 +3,5 @@ require "./monads/*"
 module Monads
   # Requirements for 1.0.0
   # - Documentation
-  # - Update Readme
-  # - Try monad
-  VERSION = "0.3.0"
+  VERSION = "0.4.0"
 end
