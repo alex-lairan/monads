@@ -52,6 +52,10 @@ module Monads
       1
     end
 
+    def <=>(other : Maybe)
+      1
+    end
+
     def bind(lambda : T -> Maybe(_)) : Maybe
       lambda.call(value!)
     end
@@ -87,6 +91,10 @@ module Monads
     end
 
     def <=>(other : Just)
+      -1
+    end
+
+    def <=>(other : Maybe)
       -1
     end
 
