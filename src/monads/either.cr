@@ -51,6 +51,10 @@ module Monads
       1
     end
 
+    def <=>(other : Either)
+      1
+    end
+
     def value_or(element : _)
       value!
     end
@@ -119,6 +123,10 @@ module Monads
     def <=>(other : Right)
       -1
     end
+
+    def <=>(other : Either)
+      -1
+    end
   end
 
   struct LeftException < Either(Exception, Nil)
@@ -140,6 +148,10 @@ module Monads
     end
 
     def <=>(other : Right)
+      -1
+    end
+
+    def <=>(other : Either)
       -1
     end
   end
