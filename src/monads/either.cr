@@ -79,7 +79,7 @@ module Monads
   module Leftable(E)
     def fmap(lambda : _ -> _) : Leftable(E)
       self
-    end
+   end
 
     def value_or(lambda : E -> _)
       lambda.call(@data)
@@ -107,7 +107,7 @@ module Monads
   end
 
   struct Left(E) < Either(E, Nil)
-    include Leftable(E)
+    #include Leftable(E)
 
     def initialize(@data : E)
     end
@@ -127,10 +127,38 @@ module Monads
     def <=>(other : Either)
       -1
     end
+	
+	def fmap(lambda : _ -> _) : Left(E)
+      self
+    end
+    def value_or(lambda : E -> _)
+      lambda.call(@data)
+    end
+
+    def value_or(element : U) forall U
+      element
+    end
+
+    def or(monad : Either)
+      monad
+    end
+
+    def or(lambda : E -> _)
+      lambda.call(@data)
+    end
+
+    def bind(lambda : _ -> _) : Left(E)
+      self
+    end
+
+    def map_or(default : U, lambda : _ -> _) : U forall U
+      default
+    end
+ 
   end
 
-  struct LeftException < Either(Exception, Nil)
-    include Leftable(Exception)
+ struct LeftException < Either(Exception, Nil)
+    #include Leftable(Exception)
 
     def initialize(@data : E)
     end
@@ -154,5 +182,33 @@ module Monads
     def <=>(other : Either)
       -1
     end
+
+	def fmap(lambda : _ -> _) : LeftException
+      self
+    end
+    def value_or(lambda : E -> _)
+      lambda.call(@data)
+    end
+
+    def value_or(element : U) forall U
+      element
+    end
+
+    def or(monad : Either)
+      monad
+    end
+
+    def or(lambda : E -> _)
+      lambda.call(@data)
+    end
+
+    def bind(lambda : _ -> _) : LeftException
+      self
+    end
+
+    def map_or(default : U, lambda : _ -> _) : U forall U
+      default
+    end
+ 
   end
 end
