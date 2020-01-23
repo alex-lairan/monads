@@ -12,7 +12,7 @@ module Monads
       !just?
     end
 
-    def self.return(v : T) : Just(T)
+    def self.return(v : T)
       Just.new(v)
     end
 
@@ -23,9 +23,9 @@ module Monads
     abstract def <=>(other : Nothing)
     abstract def <=>(other : Just)
     abstract def to_s
-    abstract def or(default : Maybe) : Maybe
-    abstract def value_or(default : U) : T | U forall U
-    abstract def map_or(default : U, lambda : T -> U) : U forall U
+    abstract def or(default : Maybe)
+    abstract def value_or(default : U) forall U
+    abstract def map_or(default : U, lambda : T -> U) forall U
   end
 
   struct Just(T) < Maybe(T)
@@ -36,7 +36,7 @@ module Monads
       @data
     end
 
-    def fmap(lambda : T -> U) : Just(U) forall U
+    def fmap(lambda : T -> U) forall U
       Just.new(lambda.call(@data))
     end
 
@@ -56,7 +56,7 @@ module Monads
       1
     end
 
-    def bind(lambda : T -> Maybe(_)) : Maybe
+    def bind(lambda : T -> Maybe(_))
       lambda.call(value!)
     end
 
@@ -68,7 +68,7 @@ module Monads
       Just.new(value!)
     end
 
-    def or(lambda : -> _) : Maybe(T)
+    def or(lambda : -> _)
       Just.new(value!)
     end
 
@@ -78,7 +78,7 @@ module Monads
   end
 
   struct Nothing(T) < Maybe(T)
-    def fmap(lambda : _ -> U) : Nothing forall U
+    def fmap(lambda : _ -> U) forall U
       Nothing(U).new
     end
 
@@ -98,7 +98,7 @@ module Monads
       -1
     end
 
-    def bind(lambda : _ -> Maybe(U)) : Maybe forall U
+    def bind(lambda : _ -> Maybe(U)) forall U
       Nothing(U).new
     end
 

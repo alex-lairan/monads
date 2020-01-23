@@ -28,11 +28,11 @@ module Monads
       Right.new(value)
     end
 
-    abstract def value_or(element : U) : T | U forall U
+    abstract def value_or(element : U) forall U
     abstract def or(monad : Either)
     abstract def <=>(other : Right)
     abstract def <=>(other : Left)
-    abstract def map_or(default : U, lambda : T -> U) : U forall U
+    abstract def map_or(default : U, lambda : T -> U) forall U
   end
 
   struct Right(T) < Either(Nil, T)
@@ -71,7 +71,7 @@ module Monads
       lambda.call(self.value!)
     end
 
-    def map_or(default : U, lambda : T -> U) : U forall U
+    def map_or(default : U, lambda : T -> U) forall U
       lambda.call(value!)
     end
   end
@@ -101,7 +101,7 @@ module Monads
       self
     end
 
-    def map_or(default : U, lambda : _ -> _) : U forall U
+    def map_or(default : U, lambda : _ -> _) forall U
       default
     end
   end
@@ -152,7 +152,7 @@ module Monads
       self
     end
 
-    def map_or(default : U, lambda : _ -> _) : U forall U
+    def map_or(default : U, lambda : _ -> _) forall U
       default
     end
   end
@@ -207,7 +207,7 @@ module Monads
       self
     end
 
-    def map_or(default : U, lambda : _ -> _) : U forall U
+    def map_or(default : U, lambda : _ -> _) forall U
       default
     end
   end
