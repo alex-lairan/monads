@@ -3,7 +3,7 @@ module Monads
     @result : Try(T)? = nil
 
     def initialize(proc)
-      @channel = channel = Channel::Buffered(Try(T)).new
+      @channel = channel = Channel(Try(T)).new
 
       spawn do
         value = Try(T).new(proc)
