@@ -29,10 +29,20 @@ module Monads
     end
 
     abstract def value_or(element : U) forall U
+    abstract def value_or(lambda : E -> U) forall U
     abstract def or(monad : Either)
+    abstract def or(lambda : E -> U) forall U
     abstract def <=>(other : Right)
     abstract def <=>(other : Left)
     abstract def map_or(default : U, lambda : T -> U) forall U
+
+    def value_or(&block : E -> U) forall U
+      value_or(block)
+    end
+
+    def or(&block : E -> U) forall U
+      or(block)
+    end
   end
 
   struct Right(T) < Either(Nil, T)
@@ -74,37 +84,41 @@ module Monads
     def map_or(default : U, lambda : T -> U) forall U
       lambda.call(value!)
     end
-  end
 
-  module Leftable(E)
-    def fmap(lambda : _ -> _) : Leftable(E)
-      self
-    end
-
-    def value_or(lambda : E -> _)
-      lambda.call(@data)
-    end
-
-    def value_or(element : U) forall U
-      element
-    end
-
-    def or(monad : Either)
-      monad
-    end
-
-    def or(lambda : E -> _)
-      lambda.call(@data)
-    end
-
-    def bind(lambda : _ -> _) : Leftable(E)
-      self
-    end
-
-    def map_or(default : U, lambda : _ -> _) forall U
-      default
+    def map_or(default : U, &block : T -> U) forall U
+      map_or(default, block)
     end
   end
+
+  # module Leftable(E)
+  #   def fmap(lambda : _ -> _) : Leftable(E)
+  #     self
+  #   end
+
+  #   def value_or(lambda : E -> _)
+  #     lambda.call(@data)
+  #   end
+
+  #   def value_or(element : U) forall U
+  #     element
+  #   end
+
+  #   def or(monad : Either)
+  #     monad
+  #   end
+
+  #   def or(lambda : E -> _)
+  #     lambda.call(@data)
+  #   end
+
+  #   def bind(lambda : _ -> _) : Leftable(E)
+  #     self
+  #   end
+
+  #   def map_or(default : U, lambda : _ -> _) forall U
+  #     default
+  #   end
+  # end
 
   struct Left(E) < Either(E, Nil)
     # include Leftable(E)
@@ -128,7 +142,7 @@ module Monads
       -1
     end
 
-    def fmap(lambda : _ -> _) : Left(E)
+    def fmap(lambda : _ -> U) : Left(E) forall U
       self
     end
 
@@ -154,6 +168,10 @@ module Monads
 
     def map_or(default : U, lambda : _ -> _) forall U
       default
+    end
+
+    def map_or(default : U, &block : E -> U) forall U
+      map_or(default, block)
     end
   end
 

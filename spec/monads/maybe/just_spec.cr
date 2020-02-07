@@ -48,10 +48,16 @@ describe Monads::Just do
       monad.or(exclude).should eq(monad)
     end
 
-    it "result himself with lambda" do
+    it "result himself with lambda (proc)" do
       monad = Monads::Just.new(1)
       exclude = Monads::Just.new(3)
       monad.or(-> { exclude }).should eq(monad)
+    end
+
+    it "result himself with lambda (block)" do
+      monad = Monads::Just.new(1)
+      exclude = Monads::Just.new(3)
+      monad.or { exclude }.should eq(monad)
     end
   end
 
@@ -60,18 +66,33 @@ describe Monads::Just do
       monad = Monads::Just.new(1).bind(->(value : Int32) { Monads::Just.new(value + 1) })
       monad.should eq(Monads::Just.new(2))
     end
+
+    it "export value (block)" do
+      monad = Monads::Just.new(1).bind { |value| Monads::Just.new(value + 1) }
+      monad.should eq(Monads::Just.new(2))
+    end
   end
 
   describe "#fmap" do
-    it "increase by one" do
+    it "increase by one (proc)" do
       monad = Monads::Just.new(1).fmap(->(value : Int32) { value + 1 })
+      monad.should eq(Monads::Just.new(2))
+    end
+
+    it "increase by one (block)" do
+      monad = Monads::Just.new(1).fmap { |value| value + 1 }
       monad.should eq(Monads::Just.new(2))
     end
   end
 
   describe "#map_or" do
-    it "apply function in the case of Just" do
+    it "apply function in the case of Just (proc)" do
       monad = Monads::Just.new(2).map_or(-1, ->(value : Int32) { value + 1 })
+      monad.should eq(3)
+    end
+
+    it "apply function in the case of Just (block)" do
+      monad = Monads::Just.new(2).map_or(-1) { |value| value + 1 }
       monad.should eq(3)
     end
   end
