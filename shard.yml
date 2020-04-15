@@ -1,10 +1,10 @@
 name: monads
-version: 0.5.0
+version: 0.6.0
 
 authors:
   - Alexandre Lairan <lairana@free.fr>
 
-crystal: 0.29.0
+crystal: 0.34.0
 
 license: MIT
 
