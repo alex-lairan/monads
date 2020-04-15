@@ -62,15 +62,25 @@ describe Monads::Right do
       monad.value_or(5).should eq(1)
     end
 
+    it "export value (unit) with proc" do
+      monad = Monads::Right.new(1)
+      monad.value_or( ->{ 5 }).should eq(1)
+    end
+
     it "export value (unit) with block" do
       monad = Monads::Right.new(1)
-      monad.value_or(-> { 5 }).should eq(1)
+      monad.value_or { 5 }.should eq(1)
     end
   end
 
   describe "#fmap" do
-    it "increase by one" do
+    it "increase by one (proc)" do
       monad = Monads::Right.new(1).fmap(->(value : Int32) { value + 1 })
+      monad.should eq(Monads::Right.new(2))
+    end
+
+    it "increase by one (block)" do
+      monad = Monads::Right.new(1).fmap { |value| value + 1 }
       monad.should eq(Monads::Right.new(2))
     end
   end
@@ -176,15 +186,25 @@ describe Monads::Right do
       monad.should eq(Monads::Right.new(1))
     end
 
-    it "#or return self with block" do
+    it "#or return self with proc" do
       monad = Monads::Right.new(1).or(->(_value : Int32) { Monads::Right.new('a') })
+      monad.should eq(Monads::Right.new(1))
+    end
+
+    it "#or return self with block" do
+      monad = Monads::Right.new(1).or { Monads::Right.new('a') }
       monad.should eq(Monads::Right.new(1))
     end
   end
 
   describe "#bind" do
-    it "#bind apply block" do
+    it "#bind apply proc" do
       monad = Monads::Right.new(1).bind(->(x : Int32) { Monads::Right.new(x.to_s) })
+      monad.should eq(Monads::Right.new("1"))
+    end
+
+    it "#bind apply block" do
+      monad = Monads::Right.new(1).bind { |x| Monads::Right.new(x.to_s) }
       monad.should eq(Monads::Right.new("1"))
     end
   end
@@ -197,8 +217,13 @@ describe Monads::Right do
   end
 
   describe "#map_or" do
-    it "#map_or applies lambda to self.value! and return" do
+    it "#map_or applies proc to self.value! and return" do
       value = Monads::Right.new("abc").map_or('b', ->(x : String) { x[0] })
+      value.should eq('a')
+    end
+
+    it "#map_or applies block to self.value! and return" do
+      value = Monads::Right.new("abc").map_or('b') { |x| x[0] }
       value.should eq('a')
     end
   end

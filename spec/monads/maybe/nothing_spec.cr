@@ -41,10 +41,16 @@ describe Monads::Nothing do
       monad.or(exclude).should eq(exclude)
     end
 
-    it "result exclude result" do
+    it "result exclude result (proc)" do
       monad = Monads::Nothing(Int32).new
       exclude = Monads::Just.new(3)
       monad.or(-> { exclude }).should eq(exclude)
+    end
+
+    it "result exclude result (proc)" do
+      monad = Monads::Nothing(Int32).new
+      exclude = Monads::Just.new(3)
+      monad.or { exclude }.should eq(exclude)
     end
   end
 
@@ -53,18 +59,33 @@ describe Monads::Nothing do
       monad = Monads::Nothing(Int32).new.bind(->(value : Int32) { Monads::Maybe.return(value + 1) })
       monad.should eq(monad)
     end
+
+    it "export value (block)" do
+      monad = Monads::Nothing(Int32).new.bind { |value| Monads::Maybe.return(value + 1) }
+      monad.should eq(monad)
+    end
   end
 
   describe "#fmap" do
-    it "not increase by one" do
-      monad = Monads::Nothing(String).new.fmap(->(value : Int32) { value + 1 })
+    it "not increase by one (proc)" do
+      monad = Monads::Nothing(String).new.fmap(->(value : String) { value + "1" })
+      monad.should eq(Monads::Nothing(String).new)
+    end
+
+    it "not increase by one (block)" do
+      monad = Monads::Nothing(String).new.fmap { |value| value + "1" }
       monad.should eq(Monads::Nothing(String).new)
     end
   end
 
   describe "#map_or" do
-    it "return default value in the case of Nothign" do
+    it "return default value in the case of Nothing (proc)" do
       monad = Monads::Nothing(Int32).new.map_or(-1, ->(value : Int32) { value + 1 })
+      monad.should eq(-1)
+    end
+
+    it "return default value in the case of Nothing (block)" do
+      monad = Monads::Nothing(Int32).new.map_or(-1) { |value| value + 1 }
       monad.should eq(-1)
     end
   end

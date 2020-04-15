@@ -24,8 +24,21 @@ module Monads
     abstract def <=>(other : Just)
     abstract def to_s
     abstract def or(default : Maybe)
+    abstract def or(lambda : -> _)
     abstract def value_or(default : U) forall U
     abstract def map_or(default : U, lambda : T -> U) forall U
+
+    def map_or(default : U, &block : T -> U) forall U
+      map_or(default, block)
+    end
+
+    def value_or(&block : E -> U) forall U
+      value_or(block)
+    end
+
+    def or(&block : -> U) forall U
+      or(block)
+    end
   end
 
   struct Just(T) < Maybe(T)
@@ -103,7 +116,6 @@ module Monads
     end
 
     def value_or(default : U) forall U
-      print(default)
       default
     end
 

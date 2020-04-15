@@ -61,15 +61,25 @@ describe Monads::Left do
       monad.value_or(5).should eq(5)
     end
 
-    it "export value (unit)" do
+    it "export value (unit) (proc)" do
       monad = Monads::Left.new(1)
       monad.value_or(->(x : Int32) { x + 1 }).should eq(2)
+    end
+
+    it "export value (unit) (block)" do
+      monad = Monads::Left.new(1)
+      monad.value_or { |x| x + 1 }.should eq(2)
     end
   end
 
   describe "#fmap" do
-    it "not increase by one" do
-      monad = Monads::Left.new(1).fmap(->(value : String) { value + "a" })
+    it "not increase by one (proc)" do
+      monad = Monads::Left.new(1).fmap(->(value : Int32) { value.to_s + "a" })
+      monad.should eq(Monads::Left.new(1))
+    end
+
+    it "not increase by one (block)" do
+      monad = Monads::Left.new(1).fmap { |value| value.to_s + "a" }
       monad.should eq(Monads::Left.new(1))
     end
   end
@@ -175,22 +185,37 @@ describe Monads::Left do
       monad.should eq(Monads::Right.new('a'))
     end
 
-    it "#or return argument with block" do
+    it "#or return argument (proc)" do
       monad = Monads::Left.new(1).or(->(_value : Int32) { Monads::Right.new('a') })
+      monad.should eq(Monads::Right.new('a'))
+    end
+
+    it "#or return argument (block)" do
+      monad = Monads::Left.new(1).or { Monads::Right.new('a') }
       monad.should eq(Monads::Right.new('a'))
     end
   end
 
   describe "#bind" do
-    it "#bind return self" do
+    it "#bind return self (proc)" do
       monad = Monads::Left.new(1).bind(->(x : Int32) { Monads::Right.new(x.to_s) })
+      monad.should eq(Monads::Left.new(1))
+    end
+
+    it "#bind return self (block)" do
+      monad = Monads::Left.new(1).bind { |x| Monads::Right.new(x.to_s) }
       monad.should eq(Monads::Left.new(1))
     end
   end
 
   describe "#map_or" do
-    it "#map_or return argument" do
+    it "#map_or return argument (proc)" do
       value = Monads::Left.new("123").map_or('a', ->(x : String) { x[0] })
+      value.should eq('a')
+    end
+
+    it "#map_or return argument (block)" do
+      value = Monads::Left.new("123").map_or('a') { |x| x[0] }
       value.should eq('a')
     end
   end
