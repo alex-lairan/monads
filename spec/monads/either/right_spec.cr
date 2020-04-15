@@ -209,6 +209,14 @@ describe Monads::Right do
     end
   end
 
+  describe "#|" do
+  it "#| apply proc" do
+    monad = Monads::Right.new(1) | ->(x : Int32) { Monads::Right.new(x.to_s) }
+    monad.should eq(Monads::Right.new("1"))
+  end
+end
+
+
   describe "self.return" do
     it "`self.return` return Right" do
       monad = Monads::Either.return(1)

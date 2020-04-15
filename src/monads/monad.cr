@@ -16,10 +16,6 @@ module Monads
       self.bind(other)
     end
 
-    def |(&block : _ -> Monad(U)) forall U
-      self.bind(block)
-    end
-
     def >>(other : Monad(U)) forall U
       other
     end
