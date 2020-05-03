@@ -39,6 +39,11 @@ module Monads
     def or(&block : -> U) forall U
       or(block)
     end
+
+    abstract def then(lambda : T -> Void)
+    def then(&block : T -> Void)
+      self.then(block)
+    end
   end
 
   struct Just(T) < Maybe(T)
@@ -51,6 +56,11 @@ module Monads
 
     def fmap(lambda : T -> U) forall U
       Just.new(lambda.call(@data))
+    end
+
+    def then(lambda : T -> Void)
+      lambda.call(@data)
+      self
     end
 
     def to_s
@@ -93,6 +103,10 @@ module Monads
   struct Nothing(T) < Maybe(T)
     def fmap(lambda : _ -> U) forall U
       Nothing(U).new
+    end
+
+    def then(lambda : T -> Void)
+      self
     end
 
     def to_s
