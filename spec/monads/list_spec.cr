@@ -336,17 +336,17 @@ describe Monads::List do
 
   describe "#sort_by" do
     it "List[].sort_by {|x| x.size } == List[]" do
-      value = Monads::List.new([] of Array(Int32)).sort_by { |x| x.size }
+      value = Monads::List.new([] of Array(Int32)).sort_by(&.size)
       value.should eq(Monads::List.new([] of Array(Int32)))
     end
 
     it "List[[1]].sort_by {|x| x.size } == List[[1]]" do
-      value = Monads::List[[1]].sort_by { |x| x.size }
+      value = Monads::List[[1]].sort_by(&.size)
       value.should eq(Monads::List[[1]])
     end
 
     it "List[[3], [2,1], [1,2,3], [1], [-1,2]] == List[[3], [1], [2,1], [-1,2], [1,2,3]]" do
-      value = Monads::List[[3], [2, 1], [1,2,3], [1], [-1, 2]].sort_by { |x| x.size }
+      value = Monads::List[[3], [2, 1], [1,2,3], [1], [-1, 2]].sort_by(&.size)
       value.should eq(Monads::List[[3], [1], [2,1], [-1,2], [1,2,3]])
     end
   end
