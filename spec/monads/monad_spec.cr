@@ -17,7 +17,7 @@ describe Monads::Monad do
 
   describe "#>>" do
     it "List[1,2,3] >> List[] == List[]" do
-      value = Monads::List[1,2,3] >> Monads::List.new([] of Int32)
+      value = Monads::List[1, 2, 3] >> Monads::List.new([] of Int32)
       value.should eq(Monads::List.new([] of Int32))
     end
 

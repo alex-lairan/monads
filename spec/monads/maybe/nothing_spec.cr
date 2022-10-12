@@ -44,7 +44,7 @@ describe Monads::Nothing do
     it "result exclude result (proc)" do
       monad = Monads::Nothing(Int32).new
       exclude = Monads::Just.new(3)
-      monad.or(-> { exclude }).should eq(exclude)
+      monad.or(->{ exclude }).should eq(exclude)
     end
 
     it "result exclude result (proc)" do
