@@ -10,7 +10,7 @@ module Monads
     # create new List
     #
     # ```
-    # Monads::List[1,2,3] == Monads::List.new([1,2,3])
+    # Monads::List[1, 2, 3] == Monads::List.new([1, 2, 3])
     # ```
     macro [](*args)
       %array = Monads::List.new({{args}}.to_a)
@@ -85,7 +85,7 @@ module Monads
     end
 
     def bind(lambda : T -> List(U)) forall U
-      @value.map { |value| lambda.call(value) }.sum(List.new([] of U))
+      @value.sum(List.new([] of U)) { |value| lambda.call(value) }
     end
 
     def self.return(value)

@@ -64,7 +64,7 @@ describe Monads::Right do
 
     it "export value (unit) with proc" do
       monad = Monads::Right.new(1)
-      monad.value_or( ->{ 5 }).should eq(1)
+      monad.value_or(->{ 5 }).should eq(1)
     end
 
     it "export value (unit) with block" do
@@ -210,12 +210,11 @@ describe Monads::Right do
   end
 
   describe "#|" do
-  it "#| apply proc" do
-    monad = Monads::Right.new(1) | ->(x : Int32) { Monads::Right.new(x.to_s) }
-    monad.should eq(Monads::Right.new("1"))
+    it "#| apply proc" do
+      monad = Monads::Right.new(1) | ->(x : Int32) { Monads::Right.new(x.to_s) }
+      monad.should eq(Monads::Right.new("1"))
+    end
   end
-end
-
 
   describe "self.return" do
     it "`self.return` return Right" do
