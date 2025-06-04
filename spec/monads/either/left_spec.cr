@@ -162,8 +162,8 @@ describe Monads::Left do
     end
 
     it "'Left(2) >= Left(1)' should be invalid" do
-      boolean = Monads::Left.new(1) >= Monads::Left.new(1)
-      boolean.should be_truthy
+      boolean = Monads::Left.new(2) >= Monads::Left.new(1)
+      boolean.should be_falsey
     end
 
     it "comparing different type by '#>=' should be invalid" do
