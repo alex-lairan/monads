@@ -305,7 +305,7 @@ describe Monads::List do
         value.should eq(Monads::List.new([] of Int32))
       end
 
-      it "List[1].sort == List[]" do
+      it "List[1].sort == List[1]" do
         value = Monads::List[1].sort
         value.should eq(Monads::List[1])
       end
