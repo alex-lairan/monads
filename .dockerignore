@@ -1,0 +1,9 @@
+# Ignore git files
+.git
+.gitignore
+
+# Ignore build files
+build
+
+# Ignore OS specific files
+.DS_Store
