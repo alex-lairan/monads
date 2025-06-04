@@ -39,6 +39,11 @@ describe Monads::Just do
       monad = Monads::Just.new(1)
       monad.value_or(5).should eq(1)
     end
+
+    it "export value (block)" do
+      monad = Monads::Just.new(1)
+      monad.value_or { 5 }.should eq(1)
+    end
   end
 
   describe "#or" do
