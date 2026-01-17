@@ -156,7 +156,7 @@ describe Monads::Just do
       boolean.should be_truthy
     end
 
-    it "comparison of samve value is valid" do
+    it "comparison of same value is valid" do
       boolean = Monads::Just.new('a') <= Monads::Just.new('a')
       boolean.should be_truthy
     end
@@ -202,7 +202,7 @@ describe Monads::Just do
       boolean.should be_truthy
     end
 
-    it "compare of samve value is invalid" do
+    it "compare of same value is invalid" do
       boolean = Monads::Just.new(1) != Monads::Just.new(1)
       boolean.should be_falsey
     end
