@@ -51,7 +51,7 @@ describe Monads::Just do
     it "result himself with lambda (proc)" do
       monad = Monads::Just.new(1)
       exclude = Monads::Just.new(3)
-      monad.or(->{ exclude }).should eq(monad)
+      monad.or(-> { exclude }).should eq(monad)
     end
 
     it "result himself with lambda (block)" do
@@ -219,7 +219,7 @@ describe Monads::Just do
     it "#fold with two procs applies just_fn to value" do
       result = Monads::Just.new(42).fold(
         ->(x : Int32) { "value: #{x}" },
-        ->{ "nothing" }
+        -> { "nothing" }
       )
       result.should eq("value: 42")
     end

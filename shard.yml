@@ -1,5 +1,5 @@
 name: monads
-version: 1.2.0
+version: 1.2.1
 
 authors:
   - Alexandre Lairan <alexandrelairan+github@gmail.com>
@@ -11,4 +11,4 @@ license: MIT
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba
-    version: ~> 1.1.0
+    version: ~> 1.6.0

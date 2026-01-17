@@ -38,7 +38,7 @@ module Monads
 
     # Block version of fold
     def fold(&block : T -> U) forall U
-      fold(block, ->(e : E) { raise "Called fold on Left" })
+      fold(block, ->(_e : E) { raise "Called fold on Left" })
     end
 
     abstract def value_or(other : U) forall U

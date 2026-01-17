@@ -92,8 +92,8 @@ module Monads
       List[value]
     end
 
-    def +(rhs : List) : List
-      List.new(@value + rhs.to_a)
+    def +(other : List) : List
+      List.new(@value + other.to_a)
     end
 
     def head : Maybe(T)

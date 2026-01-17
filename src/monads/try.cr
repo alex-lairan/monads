@@ -20,8 +20,10 @@ module Monads
     def to_either
       if final_value = @final_value
         Right(Exception, T).new(final_value)
+      elsif final_error = @final_error
+        LeftException(T).new(final_error)
       else
-        LeftException(T).new @final_error.not_nil!
+        LeftException(T).new(Exception.new("Unknown error"))
       end
     end
   end

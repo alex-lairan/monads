@@ -64,7 +64,7 @@ describe Monads::Right do
 
     it "export value (unit) with proc" do
       monad = Monads::Right(String, Int32).new(1)
-      monad.value_or(->{ 5 }).should eq(1)
+      monad.value_or(-> { 5 }).should eq(1)
     end
 
     it "export value (unit) with block" do

@@ -34,7 +34,7 @@ module Monads
 
     # Block version of fold - applies block to Just value, raises for Nothing
     def fold(&block : T -> U) forall U
-      fold(block, ->{ raise "Called fold on Nothing" })
+      fold(block, -> { raise "Called fold on Nothing" })
     end
 
     def map_or(default : U, &block : T -> U) forall U
@@ -70,7 +70,7 @@ module Monads
       value! <=> other.value!
     end
 
-    def <=>(ohter : Nothing)
+    def <=>(other : Nothing)
       1
     end
 
