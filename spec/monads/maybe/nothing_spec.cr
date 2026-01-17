@@ -194,4 +194,20 @@ describe Monads::Nothing do
       boolean.should be_falsey
     end
   end
+
+  describe "#fold" do
+    it "#fold with two procs applies nothing_fn" do
+      result = Monads::Nothing(Int32).new.fold(
+        ->(x : Int32) { "value: #{x}" },
+        ->{ "nothing" }
+      )
+      result.should eq("nothing")
+    end
+
+    it "#fold with block raises error" do
+      expect_raises(Exception, "Called fold on Nothing") do
+        Monads::Nothing(Int32).new.fold { |x| x * 2 }
+      end
+    end
+  end
 end

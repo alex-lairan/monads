@@ -176,4 +176,14 @@ describe Monads::LeftException do
       value.should eq('a')
     end
   end
+
+  describe "#fold" do
+    it "#fold with two procs applies left_fn to exception" do
+      result = Monads::LeftException(Int32).new(DivisionByZeroError.new).fold(
+        ->(x : Int32) { "success: #{x}" },
+        ->(e : Exception) { "error: #{e.class.name}" }
+      )
+      result.should eq("error: DivisionByZeroError")
+    end
+  end
 end

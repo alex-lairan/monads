@@ -23,10 +23,19 @@ module Monads
     abstract def <=>(other : Nothing)
     abstract def <=>(other : Just)
     abstract def to_s
-    abstract def or(default : Maybe)
-    abstract def or(lambda : -> _)
-    abstract def value_or(default : U) forall U
+    abstract def or(other : Maybe)
+    abstract def or(other : -> _)
+    abstract def value_or(other : U) forall U
     abstract def map_or(default : U, lambda : T -> U) forall U
+
+    # Fold/match the Maybe: applies just_fn if Just, nothing_fn if Nothing
+    # Returns the result of whichever function was applied
+    abstract def fold(just_fn : T -> U, nothing_fn : -> U) forall U
+
+    # Block version of fold - applies block to Just value, raises for Nothing
+    def fold(&block : T -> U) forall U
+      fold(block, ->{ raise "Called fold on Nothing" })
+    end
 
     def map_or(default : U, &block : T -> U) forall U
       map_or(default, block)
@@ -73,20 +82,24 @@ module Monads
       lambda.call(value!)
     end
 
-    def value_or(default : _)
+    def value_or(other : _)
       value!
     end
 
-    def or(default : Maybe)
+    def or(other : Maybe)
       Just.new(value!)
     end
 
-    def or(lambda : -> _)
+    def or(other : -> _)
       Just.new(value!)
     end
 
     def map_or(default : U, lambda : T -> U) forall U
       lambda.call(value!)
+    end
+
+    def fold(just_fn : T -> U, nothing_fn : -> U) forall U
+      just_fn.call(@data)
     end
   end
 
@@ -115,20 +128,24 @@ module Monads
       Nothing(U).new
     end
 
-    def value_or(default : U) forall U
-      default
+    def value_or(other : U) forall U
+      other
     end
 
-    def or(default : Maybe)
-      default
+    def or(other : Maybe)
+      other
     end
 
-    def or(lambda : -> _)
-      lambda.call
+    def or(other : -> _)
+      other.call
     end
 
     def map_or(default : U, lambda : _ -> _) forall U
       default
+    end
+
+    def fold(just_fn : T -> U, nothing_fn : -> U) forall U
+      nothing_fn.call
     end
   end
 end

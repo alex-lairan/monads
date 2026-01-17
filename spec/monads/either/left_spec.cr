@@ -219,4 +219,20 @@ describe Monads::Left do
       value.should eq('a')
     end
   end
+
+  describe "#fold" do
+    it "#fold with two procs applies left_fn to error value" do
+      result = Monads::Left(String, Int32).new("error message").fold(
+        ->(x : Int32) { "success: #{x}" },
+        ->(e : String) { "error: #{e}" }
+      )
+      result.should eq("error: error message")
+    end
+
+    it "#fold with block raises error" do
+      expect_raises(Exception, "Called fold on Left") do
+        Monads::Left(String, Int32).new("error").fold { |x| x * 2 }
+      end
+    end
+  end
 end

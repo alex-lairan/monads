@@ -234,4 +234,19 @@ describe Monads::Right do
       value.should eq('a')
     end
   end
+
+  describe "#fold" do
+    it "#fold with two procs applies right_fn to value" do
+      result = Monads::Right(String, Int32).new(42).fold(
+        ->(x : Int32) { "success: #{x}" },
+        ->(e : String) { "error: #{e}" }
+      )
+      result.should eq("success: 42")
+    end
+
+    it "#fold with block applies block to value" do
+      result = Monads::Right(String, Int32).new(42).fold { |x| x * 2 }
+      result.should eq(84)
+    end
+  end
 end

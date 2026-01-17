@@ -214,4 +214,19 @@ describe Monads::Just do
       monad.should eq(Monads::Just.new(1))
     end
   end
+
+  describe "#fold" do
+    it "#fold with two procs applies just_fn to value" do
+      result = Monads::Just.new(42).fold(
+        ->(x : Int32) { "value: #{x}" },
+        ->{ "nothing" }
+      )
+      result.should eq("value: 42")
+    end
+
+    it "#fold with block applies block to value" do
+      result = Monads::Just.new(42).fold { |x| x * 2 }
+      result.should eq(84)
+    end
+  end
 end

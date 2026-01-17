@@ -26,10 +26,25 @@ module Monads
       Right(Nil, T).new(value)
     end
 
-    abstract def value_or(element : U) forall U
-    abstract def value_or(lambda : E -> U) forall U
-    abstract def or(monad : Either)
-    abstract def or(lambda : E -> U) forall U
+    # Fold/match the Either: applies right_fn if Right, left_fn if Left
+    # Returns the result of whichever function was applied
+    #
+    # Example:
+    #   result.fold(
+    #     ->(account : Account) { json_response(account) },
+    #     ->(error : AuthError) { error_response(error) }
+    #   )
+    abstract def fold(right_fn : T -> U, left_fn : E -> U) forall U
+
+    # Block version of fold
+    def fold(&block : T -> U) forall U
+      fold(block, ->(e : E) { raise "Called fold on Left" })
+    end
+
+    abstract def value_or(other : U) forall U
+    abstract def value_or(other : E -> U) forall U
+    abstract def or(other : Either)
+    abstract def or(other : E -> U) forall U
     abstract def <=>(other : Right)
     abstract def <=>(other : Left)
     abstract def map_or(default : U, lambda : T -> U) forall U
@@ -51,6 +66,10 @@ module Monads
       @data
     end
 
+    def fold(right_fn : T -> U, left_fn : E -> U) forall U
+      right_fn.call(@data)
+    end
+
     def fmap(lambda : T -> U) : Right(E, U) forall U
       Right(E, U).new(lambda.call(@data))
     end
@@ -67,15 +86,19 @@ module Monads
       1
     end
 
-    def value_or(element : _)
+    def value_or(other : _)
       value!
     end
 
-    def or(monad : Either)
+    def value_or(other : E -> _)
+      value!
+    end
+
+    def or(other : Either)
       self
     end
 
-    def or(lambda : _ -> _) : Right(E, T)
+    def or(other : _ -> _) : Right(E, T)
       self
     end
 
@@ -97,20 +120,20 @@ module Monads
       self.as(Leftable(E, U))
     end
 
-    def value_or(lambda : E -> _)
-      lambda.call(@data)
+    def value_or(other : E -> _)
+      other.call(@data)
     end
 
-    def value_or(element : U) forall U
-      element
+    def value_or(other : U) forall U
+      other
     end
 
-    def or(monad : Either)
-      monad
+    def or(other : Either)
+      other
     end
 
-    def or(lambda : E -> _)
-      lambda.call(@data)
+    def or(other : E -> _)
+      other.call(@data)
     end
 
     def bind(lambda : T -> _) : Leftable(E, T)
@@ -130,6 +153,10 @@ module Monads
 
     def value! : E
       @data
+    end
+
+    def fold(right_fn : T -> U, left_fn : E -> U) forall U
+      left_fn.call(@data)
     end
 
     def <=>(other : LeftException)
@@ -152,20 +179,20 @@ module Monads
       Left(E, U).new(@data)
     end
 
-    def value_or(lambda : E -> _)
-      lambda.call(@data)
+    def value_or(other : E -> _)
+      other.call(@data)
     end
 
-    def value_or(element : U) forall U
-      element
+    def value_or(other : U) forall U
+      other
     end
 
-    def or(monad : Either)
-      monad
+    def or(other : Either)
+      other
     end
 
-    def or(lambda : E -> _)
-      lambda.call(@data)
+    def or(other : E -> _)
+      other.call(@data)
     end
 
     def bind(lambda : T -> _) : Left(E, T)
@@ -189,6 +216,10 @@ module Monads
 
     def value! : Exception
       @data
+    end
+
+    def fold(right_fn : T -> U, left_fn : Exception -> U) forall U
+      left_fn.call(@data)
     end
 
     def <=>(other : LeftException)
@@ -215,20 +246,20 @@ module Monads
       LeftException(U).new(@data)
     end
 
-    def value_or(lambda : Exception -> _)
-      lambda.call(@data)
+    def value_or(other : Exception -> _)
+      other.call(@data)
     end
 
-    def value_or(element : U) forall U
-      element
+    def value_or(other : U) forall U
+      other
     end
 
-    def or(monad : Either)
-      monad
+    def or(other : Either)
+      other
     end
 
-    def or(lambda : Exception -> _)
-      lambda.call(@data)
+    def or(other : Exception -> _)
+      other.call(@data)
     end
 
     def bind(lambda : T -> _) : LeftException(T)
