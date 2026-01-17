@@ -19,9 +19,9 @@ module Monads
 
     def to_either
       if final_value = @final_value
-        Right.new(final_value)
+        Right(Exception, T).new(final_value)
       else
-        LeftException.new @final_error.not_nil!
+        LeftException(T).new @final_error.not_nil!
       end
     end
   end

@@ -16,12 +16,12 @@ describe Monads::Task do
   describe "#to_either" do
     it "Monads::Task(Float64).new(-> { 5 }).to_either is Right" do
       value = Monads::Task(Float64).new(->{ 5.0 }).to_either
-      value.should eq(Monads::Right.new(5.0))
+      value.should eq(Monads::Right(Exception, Float64).new(5.0))
     end
 
     it "Monads::Task(Float64).new(-> { 5 / 0 }).to_either is Left" do
       value = Monads::Task(Float64).new(->{ raise DivisionByZeroError.new }).to_either
-      value.should eq(Monads::LeftException.new(DivisionByZeroError.new))
+      value.should eq(Monads::LeftException(Float64).new(DivisionByZeroError.new))
     end
   end
 end

@@ -9,9 +9,9 @@ describe Monads::Monad do
     end
 
     it "Left(1) | ->(x : String) { Right(x.to_i) } == Left(1)" do
-      value = Monads::Left.new(1) \
+      value = Monads::Left(Int32, String).new(1) \
         | ->(x : String) { Monads::Either.return(x.to_i) }
-      value.should eq(Monads::Left.new(1))
+      value.should eq(Monads::Left(Int32, String).new(1))
     end
   end
 
