@@ -1,5 +1,5 @@
 # monads
-[![Build Status](https://travis-ci.org/alex-lairan/monads.svg?branch=master)](https://travis-ci.org/alex-lairan/monads)
+[![CI](https://github.com/alex-lairan/monads/actions/workflows/ci.yml/badge.svg)](https://github.com/alex-lairan/monads/actions/workflows/ci.yml)
 
 Monads for Crystal.
 
@@ -49,22 +49,47 @@ Monads::Nothing(Int32).new
 
 The *Either* monad helps to manage *errors* at the end of the chain of instructions.
 
-There are two kinds of *Either*, `Right` and `Left`.
+There are two kinds of *Either*, `Right` and `Left`. Both are parameterized with the error type `E` and the success type `T`, enabling proper type unification when returning either variant.
 
-#### Right(T)
+#### Right(E, T)
 
-This is just a value.
+This is a success value.
 
 ```crystal
-Monads::Right.new("Hello world")
+Monads::Right(String, Int32).new(42)
 ```
 
-#### Left(E)
+#### Left(E, T)
 
-This is an error.
+This is an error value.
 
 ```crystal
-Monads::Left.new("User password is incorrect")
+Monads::Left(String, Int32).new("User password is incorrect")
+```
+
+#### LeftException(T)
+
+A specialized `Left` where the error type is always `Exception`.
+
+```crystal
+Monads::LeftException(Int32).new(DivisionByZeroError.new)
+```
+
+#### Example: Error handling with Either
+
+```crystal
+def divide(a : Int32, b : Int32) : Monads::Either(String, Int32)
+  if b == 0
+    Monads::Left(String, Int32).new("Division by zero")
+  else
+    Monads::Right(String, Int32).new(a // b)
+  end
+end
+
+result = divide(10, 2)
+  .fmap(->(x : Int32) { x * 2 })
+  .value_or(->(err : String) { 0 })
+# => 10
 ```
 
 ### List(T)
@@ -85,8 +110,16 @@ Monads::List[1, 6, 4, 2]
 
 ### Try(T)
 
-The `Try` monad is a layer between *Object Oriented Exception* and *Fuctional Programming Monads*.
+The `Try` monad is a layer between *Object Oriented Exception* and *Functional Programming Monads*.
 It can be transformed into a `Maybe` or an `Either`.
+
+```crystal
+result = Monads::Try(Float64).new(->{ 10.0 / 2 }).to_either
+# => Right(Exception, Float64) with value 5.0
+
+error = Monads::Try(Float64).new(->{ raise DivisionByZeroError.new }).to_either
+# => LeftException(Float64) with the exception
+```
 
 ### Task(T)
 
