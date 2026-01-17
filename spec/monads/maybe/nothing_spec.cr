@@ -32,6 +32,11 @@ describe Monads::Nothing do
       monad = Monads::Nothing(Int32).new
       monad.value_or(5).should eq(5)
     end
+
+    it "export value (block)" do
+      monad = Monads::Nothing(Int32).new
+      monad.value_or { 6 }.should eq(6)
+    end
   end
 
   describe "#or" do

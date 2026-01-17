@@ -25,6 +25,7 @@ module Monads
     abstract def to_s
     abstract def or(other : Maybe)
     abstract def or(other : -> _)
+    abstract def value_or(other : -> U) forall U
     abstract def value_or(other : U) forall U
     abstract def map_or(default : U, lambda : T -> U) forall U
 
@@ -41,7 +42,7 @@ module Monads
       map_or(default, block)
     end
 
-    def value_or(&block : E -> U) forall U
+    def value_or(&block : -> U) forall U
       value_or(block)
     end
 
@@ -80,6 +81,10 @@ module Monads
 
     def bind(lambda : T -> Maybe(_))
       lambda.call(value!)
+    end
+
+    def value_or(other : -> _)
+      value!
     end
 
     def value_or(other : _)
@@ -126,6 +131,10 @@ module Monads
 
     def bind(lambda : _ -> Maybe(U)) forall U
       Nothing(U).new
+    end
+
+    def value_or(other : -> U) forall U
+      other.call
     end
 
     def value_or(other : U) forall U
