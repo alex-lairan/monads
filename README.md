@@ -163,6 +163,60 @@ value = Monads::Just.new(5)
 value.should eq(Monads::Nothing(Int32).new)
 ```
 
+#### fold
+
+The `fold` procedure allows pattern matching on monads, applying different functions based on the variant.
+
+##### Either fold
+
+For `Either`, `fold` takes two functions: one for the success case (`Right`) and one for the error case (`Left`).
+
+```crystal
+result = Monads::Right(String, Int32).new(42).fold(
+  ->(value : Int32) { "Success: #{value}" },
+  ->(error : String) { "Error: #{error}" }
+)
+# => "Success: 42"
+
+error = Monads::Left(String, Int32).new("Not found").fold(
+  ->(value : Int32) { "Success: #{value}" },
+  ->(error : String) { "Error: #{error}" }
+)
+# => "Error: Not found"
+```
+
+A block version applies the block to `Right` values and raises for `Left`:
+
+```crystal
+result = Monads::Right(String, Int32).new(21).fold { |x| x * 2 }
+# => 42
+```
+
+##### Maybe fold
+
+For `Maybe`, `fold` takes two functions: one for `Just` and one for `Nothing`.
+
+```crystal
+value = Monads::Just.new(42).fold(
+  ->(x : Int32) { "Got: #{x}" },
+  ->{ "Nothing here" }
+)
+# => "Got: 42"
+
+empty = Monads::Nothing(Int32).new.fold(
+  ->(x : Int32) { "Got: #{x}" },
+  ->{ "Nothing here" }
+)
+# => "Nothing here"
+```
+
+A block version applies the block to `Just` values and raises for `Nothing`:
+
+```crystal
+result = Monads::Just.new(21).fold { |x| x * 2 }
+# => 42
+```
+
 ## Development
 
 Clone then let's go, no special requirements.
