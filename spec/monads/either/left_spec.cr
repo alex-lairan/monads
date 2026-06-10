@@ -84,6 +84,18 @@ describe Monads::Left do
     end
   end
 
+  describe "#map" do
+    it "not increase by one (proc)" do
+      monad = Monads::Left(Int32, Int32).new(1).map(->(value : Int32) { value.to_s + "a" })
+      monad.should eq(Monads::Left(Int32, String).new(1))
+    end
+
+    it "not increase by one (block)" do
+      monad = Monads::Left(Int32, Int32).new(1).map { |value| value.to_s + "a" }
+      monad.should eq(Monads::Left(Int32, String).new(1))
+    end
+  end
+
   describe "#<" do
     it "'Left(1) < Left(2)' should be valid" do
       boolean = Monads::Left(Int32, String).new(1) < Monads::Left(Int32, String).new(2)
@@ -204,6 +216,18 @@ describe Monads::Left do
 
     it "#bind return self (block)" do
       monad = Monads::Left(Int32, Int32).new(1).bind { |x| Monads::Right(Int32, String).new(x.to_s) }
+      monad.should eq(Monads::Left(Int32, Int32).new(1))
+    end
+  end
+
+  describe "#flat_map" do
+    it "#flat_map return self (proc)" do
+      monad = Monads::Left(Int32, Int32).new(1).flat_map(->(x : Int32) { Monads::Right(Int32, String).new(x.to_s) })
+      monad.should eq(Monads::Left(Int32, Int32).new(1))
+    end
+
+    it "#flat_map return self (block)" do
+      monad = Monads::Left(Int32, Int32).new(1).flat_map { |x| Monads::Right(Int32, String).new(x.to_s) }
       monad.should eq(Monads::Left(Int32, Int32).new(1))
     end
   end

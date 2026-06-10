@@ -56,6 +56,22 @@ module Monads
     def or(&block : E -> U) forall U
       or(block)
     end
+
+    def map(lambda : T -> U) forall U
+      fmap(lambda)
+    end
+
+    def map(&block : T -> U) forall U
+      fmap(block)
+    end
+
+    def flat_map(lambda : T -> Either(E, U)) forall U
+      bind(lambda)
+    end
+
+    def flat_map(&block : T -> Either(E, U)) forall U
+      bind(block)
+    end
   end
 
   struct Right(E, T) < Either(E, T)

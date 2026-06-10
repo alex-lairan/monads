@@ -76,6 +76,13 @@ describe Monads::LeftException do
     end
   end
 
+  describe "#map" do
+    it "not increase by one" do
+      monad = Monads::LeftException(String).new(DivisionByZeroError.new).map(->(value : String) { value + "a" })
+      monad.should eq(Monads::LeftException(String).new(DivisionByZeroError.new))
+    end
+  end
+
   describe "#<" do
     it "'LeftException(DivisionByZeroError.new) < LeftException(ArgumentError.new)' should be valid" do
       boolean = Monads::LeftException(String).new(DivisionByZeroError.new) < Monads::LeftException(String).new(ArgumentError.new)
@@ -166,6 +173,13 @@ describe Monads::LeftException do
   describe "#bind" do
     it "#bind return self" do
       monad = Monads::LeftException(String).new(DivisionByZeroError.new).bind(->(x : String) { Monads::Right(Exception, String).new(x) })
+      monad.should eq(Monads::LeftException(String).new(DivisionByZeroError.new))
+    end
+  end
+
+  describe "#flat_map" do
+    it "#flat_map return self" do
+      monad = Monads::LeftException(String).new(DivisionByZeroError.new).flat_map(->(x : String) { Monads::Right(Exception, String).new(x) })
       monad.should eq(Monads::LeftException(String).new(DivisionByZeroError.new))
     end
   end
