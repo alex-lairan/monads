@@ -1,6 +1,8 @@
 # monads
 [![CI](https://github.com/alex-lairan/monads/actions/workflows/ci.yml/badge.svg)](https://github.com/alex-lairan/monads/actions/workflows/ci.yml)
 
+📖 **Docs:** https://alex-lairan.github.io/monads/ · **Examples:** https://alex-lairan.github.io/monads/examples/
+
 Monads for Crystal.
 
 Inspired by https://github.com/dry-rb/dry-monads
