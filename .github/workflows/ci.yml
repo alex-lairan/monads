@@ -17,6 +17,7 @@ jobs:
           - 1.17.0
           - 1.18.0
           - 1.19.0
+          - 1.20.2
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,6 +40,7 @@ jobs:
           - 1.17.0
           - 1.18.0
           - 1.19.0
+          - 1.20.2
         experimental:
           - false
         include:
@@ -51,7 +53,11 @@ jobs:
       - uses: crystal-lang/install-crystal@v1
         with:
           crystal: ${{ matrix.crystal_version }}
+      # Skip development dependencies (ameba): the linter is only needed by the
+      # check_format job, and its postinstall build does not compile against
+      # Crystal nightly. Installing it here would make the specs job fail for a
+      # reason unrelated to the library under test.
       - name: Install shards
-        run: shards install --ignore-crystal-version
+        run: shards install --ignore-crystal-version --without-development
       - name: Run tests
         run: crystal spec
