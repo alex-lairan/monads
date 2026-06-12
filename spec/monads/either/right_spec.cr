@@ -85,6 +85,18 @@ describe Monads::Right do
     end
   end
 
+  describe "#map" do
+    it "increase by one (proc)" do
+      monad = Monads::Right(String, Int32).new(1).map(->(value : Int32) { value + 1 })
+      monad.should eq(Monads::Right(String, Int32).new(2))
+    end
+
+    it "increase by one (block)" do
+      monad = Monads::Right(String, Int32).new(1).map { |value| value + 1 }
+      monad.should eq(Monads::Right(String, Int32).new(2))
+    end
+  end
+
   describe "#<" do
     it "'Right(1) < Right(2)' should be valid" do
       boolean = Monads::Right(String, Int32).new(1) < Monads::Right(String, Int32).new(2)
@@ -205,6 +217,18 @@ describe Monads::Right do
 
     it "#bind apply block" do
       monad = Monads::Right(String, Int32).new(1).bind { |x| Monads::Right(String, String).new(x.to_s) }
+      monad.should eq(Monads::Right(String, String).new("1"))
+    end
+  end
+
+  describe "#flat_map" do
+    it "#flat_map apply proc" do
+      monad = Monads::Right(String, Int32).new(1).flat_map(->(x : Int32) { Monads::Right(String, String).new(x.to_s) })
+      monad.should eq(Monads::Right(String, String).new("1"))
+    end
+
+    it "#flat_map apply block" do
+      monad = Monads::Right(String, Int32).new(1).flat_map { |x| Monads::Right(String, String).new(x.to_s) }
       monad.should eq(Monads::Right(String, String).new("1"))
     end
   end
