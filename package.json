@@ -1,0 +1,17 @@
+{
+  "name": "monads-docs",
+  "version": "0.1.0",
+  "description": "Documentation for monads - Monads for Crystal",
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "keywords": ["crystal", "monads", "functional", "maybe", "either", "documentation"],
+  "author": "Alexandre Lairan",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}
